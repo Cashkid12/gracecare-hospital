@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: gracecare-hospital-backend
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        value: mongodb+srv://joenthiga678_db_user:BWHxRE1pSi2Bil4I@cluster0.kzlyr1c.mongodb.net/gracecare_hospital?retryWrites=true&w=majority
+      - key: JWT_SECRET
+        value: gracecare_hospital_secret_key_2024_jwt_token_secure
+      - key: JWT_EXPIRE
+        value: 30d
+      - key: PORT
+        value: 10000
