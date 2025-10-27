@@ -98,14 +98,13 @@ const PatientDashboard = () => {
     </Card>
   );
 
-  // Quick Actions Handlers
+  // Quick Actions Handlers - NOW WORKING WITH REAL PAGES
   const handleMyRecords = () => {
-    navigate('/patient-profile');
+    navigate('/medical-records');
   };
 
   const handleDownloadReports = () => {
-    // Show message since no reports page exists
-    alert('No medical reports available yet. Reports will appear here after your first appointment.');
+    navigate('/medical-records');
   };
 
   const handleUpdateProfile = () => {
@@ -113,8 +112,7 @@ const PatientDashboard = () => {
   };
 
   const handleViewHistory = () => {
-    // Show message since no history page exists
-    alert('No medical history available yet. Your history will appear here after your first appointment.');
+    navigate('/medical-history');
   };
 
   return (
