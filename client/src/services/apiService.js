@@ -132,22 +132,9 @@ export const authService = {
 export const appointmentService = {
   getAppointments: () => 
     api.get('/api/appointments').catch(error => {
-      console.warn('⚠️ Appointments API failed, using mock data');
+      console.warn('⚠️ Appointments API failed, using empty data');
       return Promise.resolve({ 
-        data: [
-          {
-            _id: '1',
-            doctor: {
-              user: { firstName: 'Sarah', lastName: 'Johnson' },
-              specialization: 'Cardiologist',
-              department: 'Cardiology'
-            },
-            appointmentDate: '2024-01-15',
-            appointmentTime: '10:00 AM',
-            reason: 'Regular checkup',
-            status: 'scheduled'
-          }
-        ],
+        data: [], // EMPTY FOR NEW USERS
         mock: true
       });
     }),
@@ -270,19 +257,52 @@ export const patientService = {
   
   getMedicalHistory: () => 
     api.get('/api/patients/medical-history').catch(error => {
-      console.warn('⚠️ Medical history API failed, using mock data');
+      console.warn('⚠️ Medical history API failed, using empty data');
       return Promise.resolve({ 
         data: {
-          allergies: ['Penicillin', 'Peanuts'],
-          currentMedications: ['Vitamin D', 'Blood Pressure Medication'],
-          medicalHistory: [
-            { condition: 'Hypertension', diagnosedDate: '2020-01-15', status: 'chronic' }
-          ],
-          bloodGroup: 'A+',
-          height: '175',
-          weight: '70',
+          allergies: [], // EMPTY FOR NEW USERS
+          currentMedications: [], // EMPTY FOR NEW USERS
+          medicalHistory: [], // EMPTY FOR NEW USERS
+          bloodGroup: '',
+          height: '',
+          weight: '',
           mock: true
         }
+      });
+    }),
+
+  // NEW: Medical Records Service
+  getMedicalRecords: () => 
+    api.get('/api/patients/medical-records').catch(error => {
+      console.warn('⚠️ Medical records API failed, using empty data');
+      return Promise.resolve({ 
+        data: [], // EMPTY FOR NEW USERS
+        mock: true
+      });
+    }),
+
+  // NEW: Patient Statistics
+  getPatientStats: () => 
+    api.get('/api/patients/stats').catch(error => {
+      console.warn('⚠️ Patient stats API failed, using empty data');
+      return Promise.resolve({ 
+        data: {
+          totalVisits: 0, // ZERO FOR NEW USERS
+          upcomingAppointments: 0, // ZERO FOR NEW USERS
+          prescriptions: 0, // ZERO FOR NEW USERS
+          nextCheckup: null, // NULL FOR NEW USERS
+          mock: true
+        }
+      });
+    }),
+
+  // NEW: Patient Appointments
+  getPatientAppointments: () => 
+    api.get('/api/patients/appointments').catch(error => {
+      console.warn('⚠️ Patient appointments API failed, using empty data');
+      return Promise.resolve({ 
+        data: [], // EMPTY FOR NEW USERS
+        mock: true
       });
     }),
 };
