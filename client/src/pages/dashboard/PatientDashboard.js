@@ -15,7 +15,8 @@ import {
   Avatar,
   Alert,
   useMediaQuery,
-  useTheme
+  useTheme,
+  CircularProgress
 } from '@mui/material';
 import {
   LocalHospital,
@@ -31,11 +32,13 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { patientService, appointmentService } from '../../services/apiService';
 
 const PatientDashboard = () => {
   const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [medicalHistory, setMedicalHistory] = useState([]);
   const [patientStats, setPatientStats] = useState({});
+  const [loading, setLoading] = useState(true);
   
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -48,19 +51,34 @@ const PatientDashboard = () => {
   }, []);
 
   const fetchPatientData = async () => {
-    // EMPTY DATA FOR NEW PATIENTS
-    const emptyAppointments = [];
-    const emptyMedicalHistory = [];
-    const emptyStats = {
-      totalVisits: 0,
-      upcomingAppointments: 0,
-      prescriptions: 0,
-      nextCheckup: null
-    };
+    try {
+      setLoading(true);
+      
+      // Fetch all data in parallel
+      const [appointmentsRes, statsRes, historyRes] = await Promise.all([
+        patientService.getPatientAppointments(),
+        patientService.getPatientStats(),
+        patientService.getMedicalHistory()
+      ]);
 
-    setUpcomingAppointments(emptyAppointments);
-    setMedicalHistory(emptyMedicalHistory);
-    setPatientStats(emptyStats);
+      setUpcomingAppointments(appointmentsRes.data || []);
+      setPatientStats(statsRes.data || {});
+      setMedicalHistory(historyRes.data?.medicalHistory || []);
+      
+    } catch (error) {
+      console.error('Error fetching patient data:', error);
+      // Fallback to empty data for new patients
+      setUpcomingAppointments([]);
+      setMedicalHistory([]);
+      setPatientStats({
+        totalVisits: 0,
+        upcomingAppointments: 0,
+        prescriptions: 0,
+        nextCheckup: null
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const StatCard = ({ title, value, subtitle, icon, color = 'primary' }) => (
@@ -98,7 +116,7 @@ const PatientDashboard = () => {
     </Card>
   );
 
-  // Quick Actions Handlers - NOW WORKING WITH REAL PAGES
+  // Quick Actions Handlers
   const handleMyRecords = () => {
     navigate('/medical-records');
   };
@@ -114,6 +132,17 @@ const PatientDashboard = () => {
   const handleViewHistory = () => {
     navigate('/medical-history');
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <CircularProgress size={60} />
+        <Typography variant="h6" sx={{ ml: 2 }}>
+          Loading your dashboard...
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ flexGrow: 1, p: isMobile ? 2 : 3, bgcolor: 'background.default', minHeight: '100vh' }}>
@@ -246,7 +275,7 @@ const PatientDashboard = () => {
                 <List>
                   {upcomingAppointments.map((appointment) => (
                     <ListItem 
-                      key={appointment.id}
+                      key={appointment._id}
                       sx={{ 
                         border: '1px solid',
                         borderColor: 'divider',
@@ -260,19 +289,23 @@ const PatientDashboard = () => {
                         </Avatar>
                       </ListItemIcon>
                       <ListItemText
-                        primary={appointment.doctor}
+                        primary={`${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}`}
                         secondary={
                           <Box>
                             <Typography variant="body2">
-                              {new Date(appointment.date).toLocaleDateString()} at {appointment.time}
+                              {new Date(appointment.appointmentDate).toLocaleDateString()} at {appointment.appointmentTime}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
-                              {appointment.type} • {appointment.department}
+                              {appointment.type} • {appointment.doctor.department}
                             </Typography>
                           </Box>
                         }
                       />
-                      <Chip label="Confirmed" color="success" size="small" />
+                      <Chip 
+                        label={appointment.status === 'scheduled' ? 'Confirmed' : appointment.status} 
+                        color={appointment.status === 'scheduled' ? 'success' : 'default'} 
+                        size="small" 
+                      />
                     </ListItem>
                   ))}
                 </List>
@@ -373,8 +406,8 @@ const PatientDashboard = () => {
                 </Box>
               ) : (
                 <List>
-                  {medicalHistory.slice(0, 4).map((record) => (
-                    <ListItem key={record.id} divider>
+                  {medicalHistory.slice(0, 4).map((record, index) => (
+                    <ListItem key={index} divider>
                       <ListItemIcon>
                         <LocalHospital color="primary" />
                       </ListItemIcon>
@@ -382,21 +415,23 @@ const PatientDashboard = () => {
                         primary={
                           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Typography variant="subtitle1">
-                              {record.doctor}
+                              {record.condition}
                             </Typography>
                             <Typography variant="body2" color="textSecondary">
-                              {new Date(record.date).toLocaleDateString()}
+                              {new Date(record.diagnosedDate).toLocaleDateString()}
                             </Typography>
                           </Box>
                         }
                         secondary={
                           <Box sx={{ mt: 1 }}>
                             <Typography variant="body2">
-                              <strong>Diagnosis:</strong> {record.diagnosis}
+                              <strong>Status:</strong> {record.status}
                             </Typography>
-                            <Typography variant="body2">
-                              <strong>Prescription:</strong> {record.prescription}
-                            </Typography>
+                            {record.notes && (
+                              <Typography variant="body2">
+                                <strong>Notes:</strong> {record.notes}
+                              </Typography>
+                            )}
                           </Box>
                         }
                       />
