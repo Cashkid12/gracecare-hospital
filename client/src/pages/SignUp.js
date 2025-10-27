@@ -21,7 +21,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  FormLabel
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import {
   Person,
@@ -73,6 +74,10 @@ const SignUp = () => {
 
   const { register } = useAuth();
   const navigate = useNavigate();
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const departments = [
     'Cardiology',
@@ -202,20 +207,20 @@ const SignUp = () => {
       case 0:
         return (
           <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
+            <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
               Choose Your Account Type
             </Typography>
             
-            <FormControl component="fieldset">
+            <FormControl component="fieldset" sx={{ width: '100%' }}>
               <RadioGroup
                 value={formData.role}
                 onChange={(e) => setFormData({...formData, role: e.target.value})}
-                sx={{ gap: 3 }}
+                sx={{ gap: 2 }}
               >
                 <Card 
                   variant={formData.role === 'patient' ? 'outlined' : 'elevation'}
                   sx={{ 
-                    p: 3, 
+                    p: isMobile ? 2 : 3, 
                     border: formData.role === 'patient' ? 2 : 1,
                     borderColor: formData.role === 'patient' ? 'primary.main' : 'divider',
                     backgroundColor: formData.role === 'patient' ? 'primary.50' : 'background.paper',
@@ -231,10 +236,10 @@ const SignUp = () => {
                     value="patient" 
                     control={<Radio />} 
                     label={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Person sx={{ fontSize: 40, color: 'primary.main' }} />
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2 }}>
+                        <Person sx={{ fontSize: isMobile ? 30 : 40, color: 'primary.main' }} />
                         <Box sx={{ textAlign: 'left' }}>
-                          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                          <Typography variant={isMobile ? "body1" : "h6"} sx={{ fontWeight: 'bold' }}>
                             Patient Account
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
@@ -250,7 +255,7 @@ const SignUp = () => {
                 <Card 
                   variant={formData.role === 'doctor' ? 'outlined' : 'elevation'}
                   sx={{ 
-                    p: 3, 
+                    p: isMobile ? 2 : 3, 
                     border: formData.role === 'doctor' ? 2 : 1,
                     borderColor: formData.role === 'doctor' ? 'primary.main' : 'divider',
                     backgroundColor: formData.role === 'doctor' ? 'primary.50' : 'background.paper',
@@ -266,10 +271,10 @@ const SignUp = () => {
                     value="doctor" 
                     control={<Radio />} 
                     label={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <LocalHospital sx={{ fontSize: 40, color: 'primary.main' }} />
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2 }}>
+                        <LocalHospital sx={{ fontSize: isMobile ? 30 : 40, color: 'primary.main' }} />
                         <Box sx={{ textAlign: 'left' }}>
-                          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                          <Typography variant={isMobile ? "body1" : "h6"} sx={{ fontWeight: 'bold' }}>
                             Doctor Account
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
@@ -288,7 +293,7 @@ const SignUp = () => {
 
       case 1:
         return (
-          <Grid container spacing={3}>
+          <Grid container spacing={isMobile ? 2 : 3}>
             <Grid item xs={12} sm={6}>
               <TextField
                 required
@@ -296,6 +301,7 @@ const SignUp = () => {
                 label="First Name"
                 value={formData.firstName}
                 onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                size={isMobile ? "small" : "medium"}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -305,6 +311,7 @@ const SignUp = () => {
                 label="Last Name"
                 value={formData.lastName}
                 onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                size={isMobile ? "small" : "medium"}
               />
             </Grid>
             <Grid item xs={12}>
@@ -315,6 +322,7 @@ const SignUp = () => {
                 label="Email Address"
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
+                size={isMobile ? "small" : "medium"}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -325,6 +333,7 @@ const SignUp = () => {
                 label="Password"
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
+                size={isMobile ? "small" : "medium"}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -335,6 +344,7 @@ const SignUp = () => {
                 label="Confirm Password"
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                size={isMobile ? "small" : "medium"}
               />
             </Grid>
             <Grid item xs={12}>
@@ -343,6 +353,7 @@ const SignUp = () => {
                 label="Phone Number"
                 value={formData.phone}
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                size={isMobile ? "small" : "medium"}
               />
             </Grid>
           </Grid>
@@ -351,15 +362,15 @@ const SignUp = () => {
       case 2:
         if (formData.role === 'doctor') {
           return (
-            <Grid container spacing={3}>
+            <Grid container spacing={isMobile ? 2 : 3}>
               <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <LocalHospital color="primary" />
                   Professional Information
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
+                <FormControl fullWidth required size={isMobile ? "small" : "medium"}>
                   <InputLabel>Specialization</InputLabel>
                   <Select
                     value={formData.specialization}
@@ -373,7 +384,7 @@ const SignUp = () => {
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
+                <FormControl fullWidth required size={isMobile ? "small" : "medium"}>
                   <InputLabel>Department</InputLabel>
                   <Select
                     value={formData.department}
@@ -394,6 +405,7 @@ const SignUp = () => {
                   value={formData.licenseNumber}
                   onChange={(e) => setFormData({...formData, licenseNumber: e.target.value})}
                   placeholder="e.g., MED123456"
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -405,6 +417,7 @@ const SignUp = () => {
                   value={formData.experience}
                   onChange={(e) => setFormData({...formData, experience: e.target.value})}
                   inputProps={{ min: 0, max: 50 }}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -415,6 +428,7 @@ const SignUp = () => {
                   value={formData.consultationFee}
                   onChange={(e) => setFormData({...formData, consultationFee: e.target.value})}
                   placeholder="50"
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -422,9 +436,10 @@ const SignUp = () => {
                   fullWidth
                   label="Address"
                   multiline
-                  rows={2}
+                  rows={isMobile ? 2 : 3}
                   value={formData.address}
                   onChange={(e) => setFormData({...formData, address: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -435,15 +450,16 @@ const SignUp = () => {
                   value={formData.dateOfBirth}
                   onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
                   InputLabelProps={{ shrink: true }}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
             </Grid>
           );
         } else {
           return (
-            <Grid container spacing={3}>
+            <Grid container spacing={isMobile ? 2 : 3}>
               <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <MedicalServices color="primary" />
                   Patient Information
                 </Typography>
@@ -456,10 +472,11 @@ const SignUp = () => {
                   value={formData.dateOfBirth}
                   onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
                   InputLabelProps={{ shrink: true }}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
+                <FormControl fullWidth size={isMobile ? "small" : "medium"}>
                   <InputLabel>Blood Type</InputLabel>
                   <Select
                     value={formData.bloodType}
@@ -477,9 +494,10 @@ const SignUp = () => {
                   fullWidth
                   label="Address"
                   multiline
-                  rows={2}
+                  rows={isMobile ? 2 : 3}
                   value={formData.address}
                   onChange={(e) => setFormData({...formData, address: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -487,14 +505,15 @@ const SignUp = () => {
                   fullWidth
                   label="Allergies (if any)"
                   multiline
-                  rows={2}
+                  rows={isMobile ? 2 : 3}
                   value={formData.allergies}
                   onChange={(e) => setFormData({...formData, allergies: e.target.value})}
                   placeholder="List any allergies separated by commas"
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+                <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ mt: 2 }}>
                   Emergency Contact
                 </Typography>
               </Grid>
@@ -504,6 +523,7 @@ const SignUp = () => {
                   label="Emergency Contact Name"
                   value={formData.emergencyContactName}
                   onChange={(e) => setFormData({...formData, emergencyContactName: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -512,10 +532,11 @@ const SignUp = () => {
                   label="Emergency Contact Phone"
                   value={formData.emergencyContactPhone}
                   onChange={(e) => setFormData({...formData, emergencyContactPhone: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+                <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ mt: 2 }}>
                   Insurance Information (Optional)
                 </Typography>
               </Grid>
@@ -525,6 +546,7 @@ const SignUp = () => {
                   label="Insurance Provider"
                   value={formData.insuranceProvider}
                   onChange={(e) => setFormData({...formData, insuranceProvider: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -533,6 +555,7 @@ const SignUp = () => {
                   label="Insurance Number"
                   value={formData.insuranceNumber}
                   onChange={(e) => setFormData({...formData, insuranceNumber: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
                 />
               </Grid>
             </Grid>
@@ -549,7 +572,7 @@ const SignUp = () => {
               }
             </Alert>
             
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+            <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ fontWeight: 'bold' }}>
               Ready to Join GraceCare Hospital!
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
@@ -558,7 +581,7 @@ const SignUp = () => {
 
             <Card variant="outlined" sx={{ mb: 3 }}>
               <CardContent>
-                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Assignment color="primary" />
                   Account Summary
                 </Typography>
@@ -594,7 +617,7 @@ const SignUp = () => {
 
                 {formData.role === 'doctor' ? (
                   <>
-                    <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
+                    <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
                       <LocalHospital color="primary" />
                       Professional Information
                     </Typography>
@@ -636,7 +659,7 @@ const SignUp = () => {
                   </>
                 ) : (
                   <>
-                    <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
+                    <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
                       <MedicalServices color="primary" />
                       Patient Information
                     </Typography>
@@ -688,19 +711,19 @@ const SignUp = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md" sx={{ py: 4 }}>
-      <Paper elevation={3} sx={{ p: { xs: 3, md: 6 } }}>
+    <Container component="main" maxWidth="md" sx={{ py: isMobile ? 2 : 4 }}>
+      <Paper elevation={isMobile ? 1 : 3} sx={{ p: isMobile ? 2 : { xs: 3, md: 6 } }}>
         <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <LocalHospital sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
-          <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: 'secondary.main' }}>
+          <LocalHospital sx={{ fontSize: isMobile ? 48 : 64, color: 'primary.main', mb: 2 }} />
+          <Typography variant={isMobile ? "h5" : "h4"} gutterBottom sx={{ fontWeight: 700, color: 'secondary.main' }}>
             Join our healthcare community
           </Typography>
-          <Typography variant="h6" color="text.secondary">
+          <Typography variant={isMobile ? "body1" : "h6"} color="text.secondary">
             in {steps.length} simple steps
           </Typography>
         </Box>
 
-        <Stepper activeStep={activeStep} sx={{ mb: 6 }}>
+        <Stepper activeStep={activeStep} sx={{ mb: 6 }} orientation={isMobile ? "vertical" : "horizontal"}>
           {steps.map((label, index) => (
             <Step key={label}>
               <StepLabel>
@@ -708,7 +731,7 @@ const SignUp = () => {
                 {index === 1 && <Assignment sx={{ mr: 1 }} />}
                 {index === 2 && formData.role === 'doctor' ? <LocalHospital sx={{ mr: 1 }} /> : <MedicalServices sx={{ mr: 1 }} />}
                 {index === 3 && <CheckCircle sx={{ mr: 1 }} />}
-                {label}
+                {isMobile ? label.split(' ')[0] : label}
               </StepLabel>
             </Step>
           ))}
@@ -723,11 +746,15 @@ const SignUp = () => {
         <Box component="form">
           {renderStepContent(activeStep)}
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 2 : 0 }}>
             <Button
               onClick={handleBack}
               disabled={activeStep === 0 || loading}
-              sx={{ visibility: activeStep === 0 ? 'hidden' : 'visible' }}
+              sx={{ 
+                visibility: activeStep === 0 ? 'hidden' : 'visible',
+                width: isMobile ? '100%' : 'auto'
+              }}
+              size={isMobile ? "large" : "medium"}
             >
               Back
             </Button>
@@ -738,7 +765,11 @@ const SignUp = () => {
                 onClick={handleSubmit}
                 disabled={loading}
                 startIcon={<CheckCircle />}
-                sx={{ px: 4 }}
+                sx={{ 
+                  px: 4,
+                  width: isMobile ? '100%' : 'auto'
+                }}
+                size={isMobile ? "large" : "medium"}
               >
                 {loading ? 'Creating Account...' : 'Complete Registration'}
               </Button>
@@ -746,7 +777,11 @@ const SignUp = () => {
               <Button
                 variant="contained"
                 onClick={handleNext}
-                sx={{ px: 4 }}
+                sx={{ 
+                  px: 4,
+                  width: isMobile ? '100%' : 'auto'
+                }}
+                size={isMobile ? "large" : "medium"}
               >
                 Next
               </Button>
