@@ -34,6 +34,10 @@ import PatientProfile from './pages/profile/PatientProfile';
 import DoctorProfile from './pages/profile/DoctorProfile';
 import AdminProfile from './pages/profile/AdminProfile';
 
+// Medical Pages - NEW
+import MedicalRecords from './pages/medical/MedicalRecords';
+import MedicalHistory from './pages/medical/MedicalHistory';
+
 // Admin Management Pages
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminAppointments from './pages/admin/AdminAppointments';
@@ -223,7 +227,25 @@ function App() {
                   } 
                 />
                 
-                {/* Admin Management Routes - NEWLY ADDED */}
+                {/* Medical Pages - NEW ROUTES */}
+                <Route 
+                  path="/medical-records" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <MedicalRecords />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/medical-history" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <MedicalHistory />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Admin Management Routes */}
                 <Route 
                   path="/admin-users" 
                   element={
