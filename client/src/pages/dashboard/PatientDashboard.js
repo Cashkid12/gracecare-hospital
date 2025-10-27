@@ -13,7 +13,9 @@ import {
   ListItemIcon,
   Chip,
   Avatar,
-  LinearProgress
+  Alert,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import {
   LocalHospital,
@@ -23,7 +25,9 @@ import {
   Person,
   History,
   Download,
-  Add
+  Add,
+  Info,
+  Assignment
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -35,46 +39,50 @@ const PatientDashboard = () => {
   
   const { user } = useAuth();
   const navigate = useNavigate();
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     fetchPatientData();
   }, []);
 
   const fetchPatientData = async () => {
-    // Mock data - replace with API calls
-    const mockUpcomingAppointments = [
-      { id: 1, doctor: 'Dr. Sarah Smith', date: '2024-01-20', time: '10:00 AM', type: 'Consultation', department: 'Cardiology' },
-      { id: 2, doctor: 'Dr. Mike Johnson', date: '2024-01-25', time: '2:30 PM', type: 'Follow-up', department: 'General Medicine' }
-    ];
-
-    const mockMedicalHistory = [
-      { id: 1, date: '2024-01-15', doctor: 'Dr. Sarah Smith', diagnosis: 'Routine Checkup', prescription: 'Vitamin D' },
-      { id: 2, date: '2023-12-10', doctor: 'Dr. Mike Johnson', diagnosis: 'Flu', prescription: 'Antibiotics' },
-      { id: 3, date: '2023-11-05', doctor: 'Dr. Emily Brown', diagnosis: 'Dental Cleaning', prescription: 'None' }
-    ];
-
-    const mockStats = {
-      totalVisits: 12,
-      upcomingAppointments: 2,
-      prescriptions: 3,
-      nextCheckup: '2024-02-15'
+    // EMPTY DATA FOR NEW PATIENTS
+    const emptyAppointments = [];
+    const emptyMedicalHistory = [];
+    const emptyStats = {
+      totalVisits: 0,
+      upcomingAppointments: 0,
+      prescriptions: 0,
+      nextCheckup: null
     };
 
-    setUpcomingAppointments(mockUpcomingAppointments);
-    setMedicalHistory(mockMedicalHistory);
-    setPatientStats(mockStats);
+    setUpcomingAppointments(emptyAppointments);
+    setMedicalHistory(emptyMedicalHistory);
+    setPatientStats(emptyStats);
   };
 
   const StatCard = ({ title, value, subtitle, icon, color = 'primary' }) => (
-    <Card sx={{ height: '100%', transition: 'all 0.3s ease', '&:hover': { transform: 'translateY(-4px)' } }}>
+    <Card sx={{ 
+      height: '100%', 
+      transition: 'all 0.3s ease', 
+      '&:hover': { transform: 'translateY(-4px)' },
+      border: value === 0 ? '2px dashed' : 'none',
+      borderColor: 'divider'
+    }}>
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box>
-            <Typography color="textSecondary" gutterBottom>
+            <Typography color="textSecondary" gutterBottom variant={isMobile ? "body2" : "body1"}>
               {title}
             </Typography>
-            <Typography variant="h4" sx={{ color: `${color}.main`, fontWeight: 'bold' }}>
-              {value}
+            <Typography variant={isMobile ? "h5" : "h4"} sx={{ 
+              color: value === 0 ? 'text.secondary' : `${color}.main`, 
+              fontWeight: 'bold',
+              fontStyle: value === 0 ? 'italic' : 'normal'
+            }}>
+              {value === 0 ? 'None' : value}
             </Typography>
             {subtitle && (
               <Typography variant="body2" color="textSecondary">
@@ -82,7 +90,7 @@ const PatientDashboard = () => {
               </Typography>
             )}
           </Box>
-          <Box sx={{ color: `${color}.main` }}>
+          <Box sx={{ color: value === 0 ? 'text.secondary' : `${color}.main` }}>
             {icon}
           </Box>
         </Box>
@@ -90,21 +98,60 @@ const PatientDashboard = () => {
     </Card>
   );
 
+  // Quick Actions Handlers
+  const handleMyRecords = () => {
+    navigate('/patient-profile');
+  };
+
+  const handleDownloadReports = () => {
+    // Show message since no reports page exists
+    alert('No medical reports available yet. Reports will appear here after your first appointment.');
+  };
+
+  const handleUpdateProfile = () => {
+    navigate('/patient-profile');
+  };
+
+  const handleViewHistory = () => {
+    // Show message since no history page exists
+    alert('No medical history available yet. Your history will appear here after your first appointment.');
+  };
+
   return (
-    <Box sx={{ flexGrow: 1, p: 3, bgcolor: 'background.default', minHeight: '100vh' }}>
+    <Box sx={{ flexGrow: 1, p: isMobile ? 2 : 3, bgcolor: 'background.default', minHeight: '100vh' }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-          Welcome back, {user?.firstName}!
+        <Typography variant={isMobile ? "h5" : "h4"} gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+          Welcome to GraceCare, {user?.firstName}! 👋
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Manage your healthcare journey with us.
+        <Typography variant={isMobile ? "body2" : "body1"} color="text.secondary">
+          {upcomingAppointments.length === 0 
+            ? "Get started by booking your first appointment"
+            : "Manage your healthcare journey with us"
+          }
         </Typography>
       </Box>
 
+      {/* Welcome Alert for New Patients */}
+      {upcomingAppointments.length === 0 && medicalHistory.length === 0 && (
+        <Alert 
+          severity="info" 
+          sx={{ mb: 3 }}
+          icon={<Info />}
+        >
+          <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+            Welcome to GraceCare Hospital! 🏥
+          </Typography>
+          <Typography variant="body2">
+            Book your first appointment to get started with your healthcare journey. 
+            Your dashboard will show appointments, medical records, and health insights here.
+          </Typography>
+        </Alert>
+      )}
+
       {/* Quick Stats */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+      <Grid container spacing={isMobile ? 2 : 3} sx={{ mb: 4 }}>
+        <Grid item xs={6} sm={6} md={3}>
           <StatCard
             title="Total Visits"
             value={patientStats.totalVisits}
@@ -113,7 +160,7 @@ const PatientDashboard = () => {
             color="primary"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={6} md={3}>
           <StatCard
             title="Upcoming"
             value={patientStats.upcomingAppointments}
@@ -122,7 +169,7 @@ const PatientDashboard = () => {
             color="secondary"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={6} md={3}>
           <StatCard
             title="Prescriptions"
             value={patientStats.prescriptions}
@@ -131,7 +178,7 @@ const PatientDashboard = () => {
             color="success"
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={6} sm={6} md={3}>
           <StatCard
             title="Next Checkup"
             value={patientStats.nextCheckup ? new Date(patientStats.nextCheckup).toLocaleDateString() : 'Not scheduled'}
@@ -142,28 +189,61 @@ const PatientDashboard = () => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={isMobile ? 2 : 3}>
         {/* Upcoming Appointments */}
         <Grid item xs={12} md={6}>
           <Card>
             <CardContent>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Box sx={{ 
+                display: 'flex', 
+                justifyContent: 'space-between', 
+                alignItems: isMobile ? 'flex-start' : 'center', 
+                mb: 2,
+                flexDirection: isMobile ? 'column' : 'row',
+                gap: isMobile ? 2 : 0
+              }}>
+                <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  mb: isMobile ? 0 : 2
+                }}>
                   <CalendarToday /> Upcoming Appointments
                 </Typography>
                 <Button 
                   variant="contained" 
                   startIcon={<Add />}
                   onClick={() => navigate('/book-appointment')}
+                  size={isMobile ? "small" : "medium"}
+                  fullWidth={isMobile}
                 >
-                  Book New
+                  Book First Appointment
                 </Button>
               </Box>
 
               {upcomingAppointments.length === 0 ? (
-                <Typography color="textSecondary" sx={{ textAlign: 'center', py: 4 }}>
-                  No upcoming appointments
-                </Typography>
+                <Box sx={{ 
+                  textAlign: 'center', 
+                  py: 4,
+                  border: '2px dashed',
+                  borderColor: 'divider',
+                  borderRadius: 2
+                }}>
+                  <CalendarToday sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
+                  <Typography variant="h6" color="textSecondary" gutterBottom>
+                    No Appointments Scheduled
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                    Book your first appointment to get started with your healthcare journey
+                  </Typography>
+                  <Button 
+                    variant="outlined" 
+                    onClick={() => navigate('/book-appointment')}
+                    startIcon={<Add />}
+                  >
+                    Book Your First Visit
+                  </Button>
+                </Box>
               ) : (
                 <List>
                   {upcomingAppointments.map((appointment) => (
@@ -205,27 +285,51 @@ const PatientDashboard = () => {
           {/* Quick Actions */}
           <Card sx={{ mt: 3 }}>
             <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Quick Actions
+              <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Assignment /> Quick Actions
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  <Button fullWidth variant="outlined" startIcon={<MedicalServices />}>
+                  <Button 
+                    fullWidth 
+                    variant="outlined" 
+                    startIcon={<MedicalServices />}
+                    onClick={handleMyRecords}
+                    size={isMobile ? "small" : "medium"}
+                  >
                     My Records
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Button fullWidth variant="outlined" startIcon={<Download />}>
+                  <Button 
+                    fullWidth 
+                    variant="outlined" 
+                    startIcon={<Download />}
+                    onClick={handleDownloadReports}
+                    size={isMobile ? "small" : "medium"}
+                  >
                     Download Reports
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Button fullWidth variant="outlined" startIcon={<Person />}>
+                  <Button 
+                    fullWidth 
+                    variant="outlined" 
+                    startIcon={<Person />}
+                    onClick={handleUpdateProfile}
+                    size={isMobile ? "small" : "medium"}
+                  >
                     Update Profile
                   </Button>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Button fullWidth variant="outlined" startIcon={<History />}>
+                  <Button 
+                    fullWidth 
+                    variant="outlined" 
+                    startIcon={<History />}
+                    onClick={handleViewHistory}
+                    size={isMobile ? "small" : "medium"}
+                  >
                     View History
                   </Button>
                 </Grid>
@@ -238,14 +342,37 @@ const PatientDashboard = () => {
         <Grid item xs={12} md={6}>
           <Card sx={{ height: '100%' }}>
             <CardContent>
-              <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <History /> Recent Medical History
+              <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1 
+              }}>
+                <History /> Medical History
               </Typography>
               
               {medicalHistory.length === 0 ? (
-                <Typography color="textSecondary" sx={{ textAlign: 'center', py: 4 }}>
-                  No medical history available
-                </Typography>
+                <Box sx={{ 
+                  textAlign: 'center', 
+                  py: 4,
+                  border: '2px dashed',
+                  borderColor: 'divider',
+                  borderRadius: 2
+                }}>
+                  <LocalHospital sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
+                  <Typography variant="h6" color="textSecondary" gutterBottom>
+                    No Medical History
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                    Your medical records and visit history will appear here after your first appointment
+                  </Typography>
+                  <Button 
+                    variant="outlined" 
+                    onClick={() => navigate('/book-appointment')}
+                    startIcon={<Add />}
+                  >
+                    Start Your Health Journey
+                  </Button>
+                </Box>
               ) : (
                 <List>
                   {medicalHistory.slice(0, 4).map((record) => (
@@ -279,54 +406,45 @@ const PatientDashboard = () => {
                   ))}
                 </List>
               )}
-              
-              {medicalHistory.length > 4 && (
-                <Button fullWidth sx={{ mt: 2 }}>
-                  View Full History
-                </Button>
-              )}
             </CardContent>
           </Card>
 
-          {/* Health Summary */}
-          <Card sx={{ mt: 3 }}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Health Summary
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <Box>
-                  <Typography variant="body2" gutterBottom>
-                    Appointment Attendance
-                  </Typography>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={95} 
-                    color="success"
-                    sx={{ height: 8, borderRadius: 4 }}
-                  />
-                  <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                    95% attendance rate
-                  </Typography>
-                </Box>
-                
-                <Box>
-                  <Typography variant="body2" gutterBottom>
-                    Prescription Adherence
-                  </Typography>
-                  <LinearProgress 
-                    variant="determinate" 
-                    value={88} 
-                    color="info"
-                    sx={{ height: 8, borderRadius: 4 }}
-                  />
-                  <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-                    88% medication adherence
-                  </Typography>
-                </Box>
-              </Box>
-            </CardContent>
-          </Card>
+          {/* Health Tips for New Patients */}
+          {medicalHistory.length === 0 && (
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Info color="primary" /> Getting Started
+                </Typography>
+                <List dense>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Avatar sx={{ bgcolor: 'primary.main', width: 24, height: 24 }}>
+                        1
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText primary="Book your first appointment with a specialist" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Avatar sx={{ bgcolor: 'primary.main', width: 24, height: 24 }}>
+                        2
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText primary="Complete your medical profile for better care" />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <Avatar sx={{ bgcolor: 'primary.main', width: 24, height: 24 }}>
+                        3
+                      </Avatar>
+                    </ListItemIcon>
+                    <ListItemText primary="View your appointments and medical records here" />
+                  </ListItem>
+                </List>
+              </CardContent>
+            </Card>
+          )}
         </Grid>
       </Grid>
     </Box>
