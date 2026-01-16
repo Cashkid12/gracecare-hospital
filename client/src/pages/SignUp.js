@@ -994,7 +994,7 @@ const SignUp = () => {
         <Box sx={{ textAlign: 'center', mb: 4 }}>
           <Box
             component="img"
-            src="/logo.jpg"
+            src="/Logo.jpg"
             alt="GraceCare Logo"
             sx={{
               height: isMobile ? 50 : 60,

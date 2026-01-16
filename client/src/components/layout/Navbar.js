@@ -97,7 +97,7 @@ const Navbar = () => {
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', borderBottom: 1, borderColor: 'divider' }}>
         <Box
           component="img"
-          src="/logo.jpg"
+          src="/Logo.jpg"
           alt="GraceCare Logo"
           sx={{
             height: 50,
@@ -221,7 +221,7 @@ const Navbar = () => {
         >
           <Box
             component="img"
-            src="/logo.jpg"
+            src="/Logo.jpg"
             alt="GraceCare Logo"
             sx={{
               height: 50,

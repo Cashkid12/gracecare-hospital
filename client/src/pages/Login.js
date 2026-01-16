@@ -88,7 +88,7 @@ const Login = () => {
           <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
             <Box
               component="img"
-              src="/logo.jpg"
+              src="/Logo.jpg"
               alt="GraceCare Logo"
               sx={{
                 height: 80,

@@ -44,7 +44,7 @@ const Footer = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
               <Box
                 component="img"
-                src="/logo.jpg"
+                src="/Logo.jpg"
                 alt="GraceCare Logo"
                 sx={{
                   height: 40,
