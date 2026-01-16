@@ -173,23 +173,21 @@ function App() {
       <CssBaseline />
       <AuthProvider>
         <Router>
-          <div className="App">
-            <Navbar />
-            <main>
-              <Routes>
-                {/* Public Routes */}
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/departments" element={<Departments />} />
-                <Route path="/doctors" element={<Doctors />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/book-appointment" element={<BookAppointment />} />
-                
-                {/* Authentication Routes */}
-                <Route path="/login" element={<Login />} />
-                <Route path="/admin-login" element={<AdminLogin />} />
-                <Route path="/signup" element={<SignUp />} />
+          <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+            <Routes>
+              {/* Public Routes with Navbar/Footer */}
+              <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/departments" element={<Departments />} />
+              <Route path="/doctors" element={<Doctors />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/book-appointment" element={<BookAppointment />} />
+              
+              {/* Authentication Routes */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin-login" element={<AdminLogin />} />
+              <Route path="/signup" element={<SignUp />} />
                 
                 {/* Dashboard Routes */}
                 <Route 
@@ -398,13 +396,11 @@ function App() {
                     </ProtectedRoute>
                   } 
                 />
-                
-                {/* 404 Fallback */}
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
+              
+              {/* 404 Fallback */}
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Box>
         </Router>
       </AuthProvider>
     </ThemeProvider>
