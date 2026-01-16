@@ -316,67 +316,100 @@ const Home = () => {
         </Container>
       </Box>
 
-      {/* Why Choose Us */}
+      {/* Why Choose Us - Asymmetric Layout */}
       <Box
         id="why-choose"
         data-animate
         sx={{
           py: { xs: 6, md: 10 },
           bgcolor: '#F0FDFA',
+          position: 'relative',
+          overflow: 'visible',
           opacity: isVisible['why-choose'] ? 1 : 0,
           transform: isVisible['why-choose'] ? 'translateX(0)' : 'translateX(-30px)',
           transition: 'all 0.8s ease-out'
         }}
       >
         <Container maxWidth="lg">
-          <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
-            <Grid item xs={12} md={7}>
-              <Typography
-                variant="h3"
-                sx={{
-                  fontSize: { xs: '1.75rem', md: '2.5rem' },
-                  fontWeight: 700,
-                  color: '#14B8A6',
-                  mb: 3,
-                  textAlign: { xs: 'center', md: 'left' }
-                }}
-              >
-                Why Choose GraceCare?
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  fontSize: { xs: '0.95rem', md: '1.1rem' },
-                  color: '#555',
-                  lineHeight: 1.8,
-                  mb: 2,
-                  textAlign: { xs: 'center', md: 'left' },
-                  px: { xs: 1, md: 0 }
-                }}
-              >
-                At GraceCare Hospital, we combine cutting-edge medical technology with compassionate care. Our team of board-certified physicians and healthcare professionals are dedicated to providing personalized treatment plans that prioritize your health and wellbeing.
-              </Typography>
-              <Typography
-                variant="body1"
-                sx={{
-                  fontSize: { xs: '0.95rem', md: '1.1rem' },
-                  color: '#555',
-                  lineHeight: 1.8,
-                  textAlign: { xs: 'center', md: 'left' },
-                  px: { xs: 1, md: 0 }
-                }}
-              >
-                With state-of-the-art facilities and a patient-first approach, we ensure every visit is comfortable, efficient, and focused on achieving the best possible outcomes for you and your family.
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={5}>
+          <Box sx={{ position: 'relative', minHeight: { md: '60vh' } }}>
+            {/* Text Content - TOP LEFT */}
+            <Box
+              sx={{
+                position: { md: 'absolute' },
+                top: { md: 0 },
+                left: { md: 0 },
+                width: { xs: '100%', md: '58%' },
+                zIndex: 3,
+                mb: { xs: 4, md: 0 },
+              }}
+            >
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  opacity: isVisible['why-choose'] ? 1 : 0,
-                  transform: isVisible['why-choose'] ? 'translateX(0)' : 'translateX(30px)',
-                  transition: 'all 1s ease-out 0.4s'
+                  px: { xs: 3, md: 4 },
+                  py: { xs: 4, md: 5 },
+                  bgcolor: 'rgba(255, 255, 255, 0.95)',
+                  borderRadius: 4,
+                  boxShadow: '0 20px 60px rgba(20, 184, 166, 0.15)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                <Typography
+                  variant="h3"
+                  sx={{
+                    fontSize: { xs: '1.75rem', md: '2.5rem' },
+                    fontWeight: 700,
+                    color: '#14B8A6',
+                    mb: 3
+                  }}
+                >
+                  Why Choose GraceCare?
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: { xs: '0.95rem', md: '1.1rem' },
+                    color: '#555',
+                    lineHeight: 1.8,
+                    mb: 2
+                  }}
+                >
+                  At GraceCare Hospital, we combine cutting-edge medical technology with compassionate care. Our team of board-certified physicians and healthcare professionals are dedicated to providing personalized treatment plans that prioritize your health and wellbeing.
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    fontSize: { xs: '0.95rem', md: '1.1rem' },
+                    color: '#555',
+                    lineHeight: 1.8
+                  }}
+                >
+                  With state-of-the-art facilities and a patient-first approach, we ensure every visit is comfortable, efficient, and focused on achieving the best possible outcomes for you and your family.
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Image - BOTTOM RIGHT (Overlapping) */}
+            <Box
+              sx={{
+                position: { md: 'absolute' },
+                bottom: { md: '-60px' },
+                right: { md: 0 },
+                width: { xs: '100%', md: '45%' },
+                zIndex: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: { xs: 300, md: 400 },
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  boxShadow: '0 30px 80px rgba(20, 184, 166, 0.25)',
+                  transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                  '&:hover': {
+                    transform: 'translateY(-8px) scale(1.02)',
+                    boxShadow: '0 40px 100px rgba(20, 184, 166, 0.35)',
+                  },
                 }}
               >
                 <Box
@@ -385,19 +418,14 @@ const Home = () => {
                   alt="Why Choose Us"
                   sx={{
                     width: '100%',
-                    maxWidth: 400,
-                    height: 'auto',
-                    borderRadius: 4,
-                    boxShadow: '0 20px 60px rgba(20, 184, 166, 0.25)',
-                    transition: 'transform 0.3s ease',
-                    '&:hover': {
-                      transform: 'scale(1.05)'
-                    }
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'center',
                   }}
                 />
               </Box>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Container>
       </Box>
 
