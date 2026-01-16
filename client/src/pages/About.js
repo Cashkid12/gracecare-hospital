@@ -74,15 +74,15 @@ const About = () => {
       </Box>
 
       {/* Mission & Vision - Asymmetric Layout */}
-      <Box sx={{ bgcolor: 'background.paper', py: { xs: 8, md: 12 }, position: 'relative', overflow: 'visible' }}>
+      <Box sx={{ bgcolor: 'background.paper', py: { xs: 8, md: 12 }, position: 'relative', overflow: 'hidden' }}>
         <Container maxWidth="lg">
-          <Box sx={{ position: 'relative', minHeight: { xs: 'auto', md: '70vh' } }}>
+          <Box sx={{ position: 'relative', minHeight: { xs: '500px', md: '70vh' } }}>
             {/* Text Content - TOP LEFT */}
             <Box
               sx={{
-                position: { md: 'absolute' },
-                top: { md: 0 },
-                left: { md: 0 },
+                position: 'absolute',
+                top: 0,
+                left: 0,
                 width: { xs: '100%', md: '55%' },
                 zIndex: 3,
                 mb: { xs: 6, md: 0 },
@@ -99,19 +99,19 @@ const About = () => {
                   border: '1px solid rgba(20, 184, 166, 0.1)',
                 }}
               >
-                <Typography variant="h3" gutterBottom sx={{ fontWeight: 700, color: 'secondary.main' }}>
+                <Typography variant="h3" gutterBottom sx={{ fontWeight: 700, color: 'secondary.main', fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
                   Our Mission
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ mb: 4, lineHeight: 1.8 }}>
+                <Typography variant="body1" color="text.secondary" sx={{ mb: 4, lineHeight: 1.8, fontSize: { xs: '0.9rem', md: '1rem' } }}>
                   To provide comprehensive, compassionate, and accessible healthcare services 
                   that improve the health and well-being of our community through clinical excellence, 
                   innovative technology, and dedicated medical professionals.
                 </Typography>
                 
-                <Typography variant="h3" gutterBottom sx={{ fontWeight: 700, color: 'secondary.main' }}>
+                <Typography variant="h3" gutterBottom sx={{ fontWeight: 700, color: 'secondary.main', fontSize: { xs: '1.75rem', md: '2.5rem' } }}>
                   Our Vision
                 </Typography>
-                <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.8 }}>
+                <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.8, fontSize: { xs: '0.9rem', md: '1rem' } }}>
                   To be the leading healthcare institution recognized for exceptional patient care, 
                   medical innovation, and community health improvement across the region.
                 </Typography>
@@ -121,9 +121,9 @@ const About = () => {
             {/* About Image - BOTTOM RIGHT (Overlapping) */}
             <Box
               sx={{
-                position: { md: 'absolute' },
-                bottom: { md: '-60px' },
-                right: { md: 0 },
+                position: 'absolute',
+                bottom: { xs: '-20px', md: '-60px' },
+                right: 0,
                 width: { xs: '90%', md: '52%' },
                 zIndex: 2,
                 mt: { xs: -4, md: 0 },
