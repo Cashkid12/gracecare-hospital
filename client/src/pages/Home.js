@@ -61,24 +61,24 @@ const Home = () => {
         id="hero"
         data-animate
         sx={{
-          minHeight: { xs: 'auto', md: '85vh' },
-          py: { xs: 6, md: 10 },
-          background: 'linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 50%, #FFFFFF 100%)',
+          minHeight: { xs: 'auto', md: '90vh' },
+          py: { xs: 6, md: 15 },
+          background: 'linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 100%)',
           position: 'relative',
-          overflow: 'hidden',
+          overflow: 'visible',
           opacity: isVisible.hero ? 1 : 0,
           transform: isVisible.hero ? 'translateY(0)' : 'translateY(30px)',
           transition: 'all 0.8s ease-out'
         }}
       >
-        <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 4, lg: 6 } }}>
-          <Grid container spacing={{ xs: 3, md: 4, lg: 6 }} alignItems="center">
+        <Container maxWidth="lg">
+          <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
             <Grid item xs={12} md={6} order={{ xs: 1, md: 1 }}>
               <Box sx={{ textAlign: { xs: 'center', md: 'left' }, px: { xs: 2, md: 0 } }}>
                 <Typography
                   variant="h2"
                   sx={{
-                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem', lg: '3.5rem' },
+                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3.5rem' },
                     fontWeight: 800,
                     color: '#14B8A6',
                     mb: 2,
@@ -157,7 +157,7 @@ const Home = () => {
                   src="/logo.jpg"
                   alt="GraceCare Hospital"
                   sx={{
-                    width: { xs: '220px', sm: '280px', md: '350px', lg: '450px' },
+                    width: { xs: '200px', sm: '250px', md: '400px' },
                     height: 'auto',
                     borderRadius: 4,
                     boxShadow: '0 20px 60px rgba(20, 184, 166, 0.2)',
@@ -186,11 +186,11 @@ const Home = () => {
           transition: 'all 0.8s ease-out 0.2s'
         }}
       >
-        <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 4, lg: 6 } }}>
+        <Container maxWidth="lg">
           <Typography
             variant="h3"
             sx={{
-              fontSize: { xs: '1.75rem', md: '2.25rem', lg: '2.5rem' },
+              fontSize: { xs: '1.75rem', md: '2.5rem' },
               fontWeight: 700,
               textAlign: 'center',
               color: '#14B8A6',
@@ -213,9 +213,9 @@ const Home = () => {
             Comprehensive healthcare services designed for your wellbeing
           </Typography>
 
-          <Grid container spacing={{ xs: 2, md: 3, lg: 4 }}>
+          <Grid container spacing={{ xs: 2, md: 3 }}>
             {services.map((service, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <Grid item xs={12} sm={6} md={6} lg={3} key={index}>
                 <Card
                   sx={{
                     height: '100%',
@@ -288,8 +288,8 @@ const Home = () => {
           transition: 'all 0.8s ease-out'
         }}
       >
-        <Container maxWidth="xl" sx={{ px: { xs: 2, sm: 3, md: 4, lg: 6 } }}>
-          <Grid container spacing={{ xs: 3, md: 4, lg: 6 }} alignItems="center">
+        <Container maxWidth="lg">
+          <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
             <Grid item xs={12} md={7}>
               <Typography
                 variant="h3"
