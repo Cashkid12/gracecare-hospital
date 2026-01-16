@@ -72,16 +72,16 @@ const Home = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ position: 'relative', minHeight: { md: '65vh' }, mb: { md: 8 } }}>
+          <Box sx={{ position: 'relative', minHeight: { xs: '500px', md: '65vh' }, mb: { md: 8 } }}>
             {/* Text Content - TOP LEFT */}
             <Box
               sx={{
-                position: { md: 'absolute' },
-                top: { md: 0 },
-                left: { md: 0 },
+                position: 'absolute',
+                top: 0,
+                left: 0,
                 width: { xs: '100%', md: '52%' },
                 zIndex: 3,
-                mb: { xs: 4, md: 0 },
+                mb: { xs: 6, md: 0 },
               }}
             >
               <Box 
@@ -173,9 +173,9 @@ const Home = () => {
             {/* Image - BOTTOM RIGHT (Overlapping) */}
             <Box
               sx={{
-                position: { md: 'absolute' },
-                bottom: { md: 0 },
-                right: { md: 0 },
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
                 width: { xs: '100%', md: '50%' },
                 zIndex: 2,
                 display: 'flex',
@@ -331,13 +331,13 @@ const Home = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ position: 'relative', minHeight: { md: '50vh' }, mb: { md: 6 } }}>
+          <Box sx={{ position: 'relative', minHeight: { xs: '450px', md: '50vh' }, mb: { md: 6 } }}>
             {/* Text Content - TOP LEFT */}
             <Box
               sx={{
-                position: { md: 'absolute' },
-                top: { md: 0 },
-                left: { md: 0 },
+                position: 'absolute',
+                top: 0,
+                left: 0,
                 width: { xs: '100%', md: '58%' },
                 zIndex: 3,
                 mb: { xs: 4, md: 0 },
@@ -391,9 +391,9 @@ const Home = () => {
             {/* Image - BOTTOM RIGHT (Overlapping) */}
             <Box
               sx={{
-                position: { md: 'absolute' },
-                bottom: { md: 0 },
-                right: { md: 0 },
+                position: 'absolute',
+                bottom: 0,
+                right: 0,
                 width: { xs: '100%', md: '45%' },
                 zIndex: 2,
               }}
