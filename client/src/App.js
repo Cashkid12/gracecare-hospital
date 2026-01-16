@@ -55,10 +55,11 @@ import MedicalRecords from './pages/medical/MedicalRecords';
 import MedicalHistory from './pages/medical/MedicalHistory';
 
 // Admin Management Pages
-import AdminUsers from './pages/admin/AdminUsers';
-import AdminAppointments from './pages/admin/AdminAppointments';
-import AdminDepartments from './pages/admin/AdminDepartments';
-import AdminAnalytics from './pages/admin/AdminAnalytics';
+import AdminUsers from './pages/dashboard/admin/AdminUserManagement';
+import AdminAppointments from './pages/dashboard/admin/AdminAppointmentManagement';
+import AdminDepartments from './pages/dashboard/admin/AdminDepartmentManagement';
+import AdminAnalytics from './pages/dashboard/admin/AdminAnalytics';
+import AdminSettings from './pages/dashboard/admin/AdminSettings';
 
 // Theme
 const theme = createTheme({
@@ -310,6 +311,7 @@ function App() {
                     </ProtectedRoute>
                   } 
                 />
+                {/* Admin Management Routes */}
                 <Route 
                   path="/admin-dashboard" 
                   element={
@@ -362,13 +364,11 @@ function App() {
                     </ProtectedRoute>
                   } 
                 />
-                
-                {/* Admin Management Routes */}
                 <Route 
                   path="/admin-users" 
                   element={
                     <ProtectedRoute allowedRoles={['admin']}>
-                      <AdminUsers />
+                      <AdminDashboard><AdminUsers /></AdminDashboard>
                     </ProtectedRoute>
                   } 
                 />
@@ -376,7 +376,7 @@ function App() {
                   path="/admin-appointments" 
                   element={
                     <ProtectedRoute allowedRoles={['admin']}>
-                      <AdminAppointments />
+                      <AdminDashboard><AdminAppointments /></AdminDashboard>
                     </ProtectedRoute>
                   } 
                 />
@@ -384,7 +384,7 @@ function App() {
                   path="/admin-departments" 
                   element={
                     <ProtectedRoute allowedRoles={['admin']}>
-                      <AdminDepartments />
+                      <AdminDashboard><AdminDepartments /></AdminDashboard>
                     </ProtectedRoute>
                   } 
                 />
@@ -392,7 +392,15 @@ function App() {
                   path="/admin-analytics" 
                   element={
                     <ProtectedRoute allowedRoles={['admin']}>
-                      <AdminAnalytics />
+                      <AdminDashboard><AdminAnalytics /></AdminDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin-settings" 
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminDashboard><AdminSettings /></AdminDashboard>
                     </ProtectedRoute>
                   } 
                 />
