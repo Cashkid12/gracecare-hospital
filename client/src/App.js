@@ -29,10 +29,30 @@ import PatientDashboard from './pages/dashboard/PatientDashboard';
 import DoctorDashboard from './pages/dashboard/DoctorDashboard';
 import AdminDashboard from './pages/dashboard/AdminDashboard';
 
+// Doctor Dashboard Pages
+import DoctorAppointments from './pages/dashboard/doctor/DoctorAppointments';
+import DoctorPatients from './pages/dashboard/doctor/DoctorPatients';
+import DoctorLabResults from './pages/dashboard/doctor/DoctorLabResults';
+import DoctorPrescriptions from './pages/dashboard/doctor/DoctorPrescriptions';
+import DoctorMessages from './pages/dashboard/doctor/DoctorMessages';
+import DoctorSettings from './pages/dashboard/doctor/DoctorSettings';
+
+// Patient Dashboard Pages
+import PatientAppointments from './pages/dashboard/patient/PatientAppointments';
+import PatientRecords from './pages/dashboard/patient/PatientRecords';
+import PatientLabResults from './pages/dashboard/patient/PatientLabResults';
+import PatientPrescriptions from './pages/dashboard/patient/PatientPrescriptions';
+import PatientMessages from './pages/dashboard/patient/PatientMessages';
+import PatientSettings from './pages/dashboard/patient/PatientSettings';
+
 // Profile Pages
 import PatientProfile from './pages/profile/PatientProfile';
 import DoctorProfile from './pages/profile/DoctorProfile';
 import AdminProfile from './pages/profile/AdminProfile';
+
+// Medical Pages - NEW
+import MedicalRecords from './pages/medical/MedicalRecords';
+import MedicalHistory from './pages/medical/MedicalHistory';
 
 // Admin Management Pages
 import AdminUsers from './pages/admin/AdminUsers';
@@ -44,27 +64,27 @@ import AdminAnalytics from './pages/admin/AdminAnalytics';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#2B9ED8',
-      light: '#67C2F0',
-      dark: '#0070B8',
+      main: '#14B8A6', // Teal
+      light: '#5EEAD4', // Light Aqua
+      dark: '#0F766E', // Dark Teal
     },
     secondary: {
-      main: '#003B73',
-      light: '#3F5F8F',
-      dark: '#001A49',
+      main: '#06B6D4', // Cyan Blue
+      light: '#67E8F9', // Light Cyan
+      dark: '#0E7490', // Dark Cyan
     },
     success: {
-      main: '#5BD47A',
-      light: '#8EFFA8',
-      dark: '#1DA24F',
+      main: '#6EE7B7', // Mint Green
+      light: '#A7F3D0', // Light Mint
+      dark: '#34D399', // Emerald
     },
     background: {
       default: '#FFFFFF',
-      paper: '#F8F9FA',
+      paper: '#F0FDFA', // Very light teal
     },
     text: {
-      primary: '#333333',
-      secondary: '#666666',
+      primary: '#134E4A', // Dark teal for text
+      secondary: '#0F766E', // Medium teal
     },
   },
   typography: {
@@ -99,9 +119,9 @@ const theme = createTheme({
         root: {
           borderRadius: 8,
           padding: '10px 24px',
-          boxShadow: '0 2px 8px rgba(43, 158, 216, 0.2)',
+          boxShadow: '0 2px 8px rgba(20, 184, 166, 0.2)',
           '&:hover': {
-            boxShadow: '0 4px 16px rgba(43, 158, 216, 0.3)',
+            boxShadow: '0 4px 16px rgba(20, 184, 166, 0.3)',
           },
         },
       },
@@ -181,10 +201,114 @@ function App() {
                   } 
                 />
                 <Route 
+                  path="/patient-appointments" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <PatientDashboard><PatientAppointments /></PatientDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/patient-records" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <PatientDashboard><PatientRecords /></PatientDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/patient-lab-results" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <PatientDashboard><PatientLabResults /></PatientDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/patient-prescriptions" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <PatientDashboard><PatientPrescriptions /></PatientDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/patient-billing" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <PatientDashboard><div>Billing Coming Soon</div></PatientDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/patient-messages" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <PatientDashboard><PatientMessages /></PatientDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/patient-settings" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <PatientDashboard><PatientSettings /></PatientDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
                   path="/doctor-dashboard" 
                   element={
                     <ProtectedRoute allowedRoles={['doctor']}>
                       <DoctorDashboard />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/doctor-appointments" 
+                  element={
+                    <ProtectedRoute allowedRoles={['doctor']}>
+                      <DoctorDashboard><DoctorAppointments /></DoctorDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/doctor-patients" 
+                  element={
+                    <ProtectedRoute allowedRoles={['doctor']}>
+                      <DoctorDashboard><DoctorPatients /></DoctorDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/doctor-lab-results" 
+                  element={
+                    <ProtectedRoute allowedRoles={['doctor']}>
+                      <DoctorDashboard><DoctorLabResults /></DoctorDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/doctor-prescriptions" 
+                  element={
+                    <ProtectedRoute allowedRoles={['doctor']}>
+                      <DoctorDashboard><DoctorPrescriptions /></DoctorDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/doctor-messages" 
+                  element={
+                    <ProtectedRoute allowedRoles={['doctor']}>
+                      <DoctorDashboard><DoctorMessages /></DoctorDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/doctor-settings" 
+                  element={
+                    <ProtectedRoute allowedRoles={['doctor']}>
+                      <DoctorDashboard><DoctorSettings /></DoctorDashboard>
                     </ProtectedRoute>
                   } 
                 />
@@ -223,7 +347,25 @@ function App() {
                   } 
                 />
                 
-                {/* Admin Management Routes - NEWLY ADDED */}
+                {/* Medical Pages - NEW ROUTES */}
+                <Route 
+                  path="/medical-records" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <MedicalRecords />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/medical-history" 
+                  element={
+                    <ProtectedRoute allowedRoles={['patient']}>
+                      <MedicalHistory />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Admin Management Routes */}
                 <Route 
                   path="/admin-users" 
                   element={

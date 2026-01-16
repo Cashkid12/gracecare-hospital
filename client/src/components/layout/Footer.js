@@ -24,6 +24,17 @@ const Footer = () => {
         color: 'white',
         py: 6,
         mt: 'auto',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '4px',
+          background: 'linear-gradient(90deg, #14B8A6 0%, #6EE7B7 100%)',
+        },
       }}
     >
       <Container maxWidth="lg">
@@ -31,7 +42,17 @@ const Footer = () => {
           {/* Hospital Info */}
           <Grid item xs={12} md={4}>
             <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-              <HospitalIcon sx={{ mr: 1, fontSize: 32 }} />
+              <Box
+                component="img"
+                src="/logo.jpg"
+                alt="GraceCare Logo"
+                sx={{
+                  height: 40,
+                  width: 'auto',
+                  mr: 2,
+                  borderRadius: 1,
+                }}
+              />
               <Typography variant="h6" component="div" sx={{ fontWeight: 700 }}>
                 GraceCare Hospital
               </Typography>
@@ -40,16 +61,60 @@ const Footer = () => {
               Your Health, Our Priority. Providing world-class healthcare services with compassion and excellence since 2010.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <IconButton sx={{ color: 'white', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <IconButton 
+                sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    bgcolor: 'rgba(91, 212, 122, 0.2)',
+                    transform: 'translateY(-3px)'
+                  } 
+                }}
+              >
                 <FacebookIcon />
               </IconButton>
-              <IconButton sx={{ color: 'white', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <IconButton 
+                sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    bgcolor: 'rgba(91, 212, 122, 0.2)',
+                    transform: 'translateY(-3px)'
+                  } 
+                }}
+              >
                 <TwitterIcon />
               </IconButton>
-              <IconButton sx={{ color: 'white', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <IconButton 
+                sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    bgcolor: 'rgba(91, 212, 122, 0.2)',
+                    transform: 'translateY(-3px)'
+                  } 
+                }}
+              >
                 <InstagramIcon />
               </IconButton>
-              <IconButton sx={{ color: 'white', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <IconButton 
+                sx={{ 
+                  color: 'white', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    bgcolor: 'rgba(91, 212, 122, 0.2)',
+                    transform: 'translateY(-3px)'
+                  } 
+                }}
+              >
                 <LinkedInIcon />
               </IconButton>
             </Box>
@@ -57,42 +122,194 @@ const Footer = () => {
 
           {/* Quick Links */}
           <Grid item xs={12} sm={6} md={2}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
               Quick Links
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/" color="inherit" sx={{ textDecoration: 'none', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              <Link 
+                href="/" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
                 Home
               </Link>
-              <Link href="/about" color="inherit" sx={{ textDecoration: 'none', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <Link 
+                href="/about" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
                 About Us
               </Link>
-              <Link href="/services" color="inherit" sx={{ textDecoration: 'none', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <Link 
+                href="/services" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
                 Services
               </Link>
-              <Link href="/doctors" color="inherit" sx={{ textDecoration: 'none', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <Link 
+                href="/doctors" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
                 Doctors
+              </Link>
+              <Link 
+                href="/departments" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
+                Departments
+              </Link>
+              <Link 
+                href="/contact" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
+                Contact
               </Link>
             </Box>
           </Grid>
 
           {/* Departments */}
           <Grid item xs={12} sm={6} md={3}>
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+            <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, mb: 2 }}>
               Departments
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Link href="/departments#cardiology" color="inherit" sx={{ textDecoration: 'none', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              <Link 
+                href="/departments#cardiology" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
                 Cardiology
               </Link>
-              <Link href="/departments#pediatrics" color="inherit" sx={{ textDecoration: 'none', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <Link 
+                href="/departments#pediatrics" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
                 Pediatrics
               </Link>
-              <Link href="/departments#dental" color="inherit" sx={{ textDecoration: 'none', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <Link 
+                href="/departments#dental" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
                 Dental Care
               </Link>
-              <Link href="/departments#neurology" color="inherit" sx={{ textDecoration: 'none', opacity: 0.8, '&:hover': { opacity: 1 } }}>
+              <Link 
+                href="/departments#neurology" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
                 Neurology
+              </Link>
+              <Link 
+                href="/departments#orthopedics" 
+                color="inherit" 
+                sx={{ 
+                  textDecoration: 'none', 
+                  opacity: 0.8, 
+                  transition: 'all 0.3s ease',
+                  '&:hover': { 
+                    opacity: 1,
+                    pl: 1,
+                    color: 'success.light'
+                  } 
+                }}
+              >
+                Orthopedics
               </Link>
             </Box>
           </Grid>
@@ -104,12 +321,13 @@ const Footer = () => {
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                123 Healthcare Avenue<br />
-                Medical District, City 10001
+                Kasarani, Nairobi<br />
+                Kenya
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                📞 +1 (555) 123-HELP<br />
-                📧 info@gracecare.com
+                📞 0701747503<br />
+                📞 0729526791<br />
+                📧 gracecare@gmail.com
               </Typography>
               <Typography variant="body2" sx={{ opacity: 0.8 }}>
                 ⏰ Emergency: 24/7<br />

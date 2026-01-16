@@ -21,7 +21,8 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  FormLabel
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import {
   Person,
@@ -73,6 +74,10 @@ const SignUp = () => {
 
   const { register } = useAuth();
   const navigate = useNavigate();
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   const departments = [
     'Cardiology',
@@ -202,27 +207,31 @@ const SignUp = () => {
       case 0:
         return (
           <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
+            <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
               Choose Your Account Type
             </Typography>
             
-            <FormControl component="fieldset">
+            <FormControl component="fieldset" sx={{ width: '100%' }}>
               <RadioGroup
                 value={formData.role}
                 onChange={(e) => setFormData({...formData, role: e.target.value})}
-                sx={{ gap: 3 }}
+                sx={{ gap: 2 }}
               >
                 <Card 
                   variant={formData.role === 'patient' ? 'outlined' : 'elevation'}
                   sx={{ 
-                    p: 3, 
+                    p: isMobile ? 2 : 3, 
                     border: formData.role === 'patient' ? 2 : 1,
                     borderColor: formData.role === 'patient' ? 'primary.main' : 'divider',
-                    backgroundColor: formData.role === 'patient' ? 'primary.50' : 'background.paper',
+                    backgroundColor: formData.role === 'patient' ? 'rgba(240, 253, 250, 0.5)' : 'background.paper',
                     cursor: 'pointer',
+                    borderRadius: 3,
+                    transition: 'all 0.3s ease',
                     '&:hover': {
                       borderColor: 'primary.main',
-                      backgroundColor: 'primary.50'
+                      backgroundColor: 'rgba(240, 253, 250, 0.5)',
+                      transform: 'translateY(-4px)',
+                      boxShadow: '0 8px 24px rgba(20, 184, 166, 0.15)'
                     }
                   }}
                   onClick={() => setFormData({...formData, role: 'patient'})}
@@ -231,10 +240,19 @@ const SignUp = () => {
                     value="patient" 
                     control={<Radio />} 
                     label={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Person sx={{ fontSize: 40, color: 'primary.main' }} />
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2 }}>
+                        <Box
+                          component="img"
+                          src="/sickicon.jpg"
+                          alt="Patient"
+                          sx={{
+                            width: isMobile ? 30 : 40,
+                            height: isMobile ? 30 : 40,
+                            borderRadius: 1
+                          }}
+                        />
                         <Box sx={{ textAlign: 'left' }}>
-                          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                          <Typography variant={isMobile ? "body1" : "h6"} sx={{ fontWeight: 'bold' }}>
                             Patient Account
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
@@ -250,14 +268,18 @@ const SignUp = () => {
                 <Card 
                   variant={formData.role === 'doctor' ? 'outlined' : 'elevation'}
                   sx={{ 
-                    p: 3, 
+                    p: isMobile ? 2 : 3, 
                     border: formData.role === 'doctor' ? 2 : 1,
                     borderColor: formData.role === 'doctor' ? 'primary.main' : 'divider',
-                    backgroundColor: formData.role === 'doctor' ? 'primary.50' : 'background.paper',
+                    backgroundColor: formData.role === 'doctor' ? 'rgba(240, 253, 250, 0.5)' : 'background.paper',
                     cursor: 'pointer',
+                    borderRadius: 3,
+                    transition: 'all 0.3s ease',
                     '&:hover': {
                       borderColor: 'primary.main',
-                      backgroundColor: 'primary.50'
+                      backgroundColor: 'rgba(240, 253, 250, 0.5)',
+                      transform: 'translateY(-4px)',
+                      boxShadow: '0 8px 24px rgba(20, 184, 166, 0.15)'
                     }
                   }}
                   onClick={() => setFormData({...formData, role: 'doctor'})}
@@ -266,10 +288,19 @@ const SignUp = () => {
                     value="doctor" 
                     control={<Radio />} 
                     label={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <LocalHospital sx={{ fontSize: 40, color: 'primary.main' }} />
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: isMobile ? 1 : 2 }}>
+                        <Box
+                          component="img"
+                          src="/doctoricon.jpg"
+                          alt="Doctor"
+                          sx={{
+                            width: isMobile ? 30 : 40,
+                            height: isMobile ? 30 : 40,
+                            borderRadius: 1
+                          }}
+                        />
                         <Box sx={{ textAlign: 'left' }}>
-                          <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                          <Typography variant={isMobile ? "body1" : "h6"} sx={{ fontWeight: 'bold' }}>
                             Doctor Account
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
@@ -288,254 +319,515 @@ const SignUp = () => {
 
       case 1:
         return (
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                label="First Name"
-                value={formData.firstName}
-                onChange={(e) => setFormData({...formData, firstName: e.target.value})}
-              />
+          <Box>
+            <Typography 
+              variant="overline" 
+              sx={{ 
+                color: 'primary.main', 
+                fontWeight: 700, 
+                fontSize: '0.85rem',
+                letterSpacing: '2px',
+                display: 'block',
+                mb: 1
+              }}
+            >
+              STEP 2 OF 4
+            </Typography>
+            <Typography variant={isMobile ? "h5" : "h4"} gutterBottom sx={{ fontWeight: 700, color: 'secondary.main', mb: 1 }}>
+              Account Information
+            </Typography>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+              Create your login credentials and contact details
+            </Typography>
+
+            <Grid container spacing={isMobile ? 2 : 3}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  label="First Name"
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      '&:hover fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Last Name"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      '&:hover fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  type="email"
+                  label="Email Address"
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
+                  placeholder="your.email@example.com"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      '&:hover fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Phone Number"
+                  value={formData.phone}
+                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
+                  placeholder="0712345678"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      '&:hover fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  type="password"
+                  label="Password"
+                  value={formData.password}
+                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
+                  helperText="Minimum 6 characters"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      '&:hover fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  type="password"
+                  label="Confirm Password"
+                  value={formData.confirmPassword}
+                  onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                  size={isMobile ? "small" : "medium"}
+                  helperText="Re-enter your password"
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      borderRadius: 2,
+                      '&:hover fieldset': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                  }}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                label="Last Name"
-                value={formData.lastName}
-                onChange={(e) => setFormData({...formData, lastName: e.target.value})}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                type="email"
-                label="Email Address"
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                type="password"
-                label="Password"
-                value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                type="password"
-                label="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Phone Number"
-                value={formData.phone}
-                onChange={(e) => setFormData({...formData, phone: e.target.value})}
-              />
-            </Grid>
-          </Grid>
+          </Box>
         );
 
       case 2:
         if (formData.role === 'doctor') {
           return (
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <LocalHospital color="primary" />
-                  Professional Information
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
-                  <InputLabel>Specialization</InputLabel>
-                  <Select
-                    value={formData.specialization}
-                    label="Specialization"
-                    onChange={(e) => setFormData({...formData, specialization: e.target.value})}
-                  >
-                    {specializations.map((spec) => (
-                      <MenuItem key={spec} value={spec}>{spec}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth required>
-                  <InputLabel>Department</InputLabel>
-                  <Select
-                    value={formData.department}
-                    label="Department"
-                    onChange={(e) => setFormData({...formData, department: e.target.value})}
-                  >
-                    {departments.map((dept) => (
-                      <MenuItem key={dept} value={dept}>{dept}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  label="Medical License Number"
-                  value={formData.licenseNumber}
-                  onChange={(e) => setFormData({...formData, licenseNumber: e.target.value})}
-                  placeholder="e.g., MED123456"
+            <Box>
+              <Typography 
+                variant="overline" 
+                sx={{ 
+                  color: 'primary.main', 
+                  fontWeight: 700, 
+                  fontSize: '0.85rem',
+                  letterSpacing: '2px',
+                  display: 'block',
+                  mb: 1
+                }}
+              >
+                STEP 3 OF 4
+              </Typography>
+              <Typography variant={isMobile ? "h5" : "h4"} gutterBottom sx={{ fontWeight: 700, color: 'secondary.main', mb: 1 }}>
+                Professional Information
+              </Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Box
+                  component="img"
+                  src="/doctoricon.jpg"
+                  alt="Doctor"
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 1
+                  }}
                 />
+                Tell us about your medical expertise and credentials
+              </Typography>
+
+              <Grid container spacing={isMobile ? 2 : 3}>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth required size={isMobile ? "small" : "medium"}>
+                    <InputLabel>Specialization</InputLabel>
+                    <Select
+                      value={formData.specialization}
+                      label="Specialization"
+                      onChange={(e) => setFormData({...formData, specialization: e.target.value})}
+                      sx={{
+                        borderRadius: 2,
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'primary.main',
+                        },
+                      }}
+                    >
+                      {specializations.map((spec) => (
+                        <MenuItem key={spec} value={spec}>{spec}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth required size={isMobile ? "small" : "medium"}>
+                    <InputLabel>Department</InputLabel>
+                    <Select
+                      value={formData.department}
+                      label="Department"
+                      onChange={(e) => setFormData({...formData, department: e.target.value})}
+                      sx={{
+                        borderRadius: 2,
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'primary.main',
+                        },
+                      }}
+                    >
+                      {departments.map((dept) => (
+                        <MenuItem key={dept} value={dept}>{dept}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    label="Medical License Number"
+                    value={formData.licenseNumber}
+                    onChange={(e) => setFormData({...formData, licenseNumber: e.target.value})}
+                    placeholder="e.g., MED123456"
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    required
+                    fullWidth
+                    type="number"
+                    label="Years of Experience"
+                    value={formData.experience}
+                    onChange={(e) => setFormData({...formData, experience: e.target.value})}
+                    inputProps={{ min: 0, max: 50 }}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    type="number"
+                    label="Consultation Fee (KES)"
+                    value={formData.consultationFee}
+                    onChange={(e) => setFormData({...formData, consultationFee: e.target.value})}
+                    placeholder="1000"
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    type="date"
+                    label="Date of Birth"
+                    value={formData.dateOfBirth}
+                    onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
+                    InputLabelProps={{ shrink: true }}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    multiline
+                    rows={isMobile ? 2 : 3}
+                    value={formData.address}
+                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                    size={isMobile ? "small" : "medium"}
+                    placeholder="Your residential address"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  type="number"
-                  label="Years of Experience"
-                  value={formData.experience}
-                  onChange={(e) => setFormData({...formData, experience: e.target.value})}
-                  inputProps={{ min: 0, max: 50 }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  type="number"
-                  label="Consultation Fee ($)"
-                  value={formData.consultationFee}
-                  onChange={(e) => setFormData({...formData, consultationFee: e.target.value})}
-                  placeholder="50"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Address"
-                  multiline
-                  rows={2}
-                  value={formData.address}
-                  onChange={(e) => setFormData({...formData, address: e.target.value})}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  type="date"
-                  label="Date of Birth"
-                  value={formData.dateOfBirth}
-                  onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-            </Grid>
+            </Box>
           );
         } else {
           return (
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <MedicalServices color="primary" />
-                  Patient Information
-                </Typography>
+            <Box>
+              <Typography 
+                variant="overline" 
+                sx={{ 
+                  color: 'primary.main', 
+                  fontWeight: 700, 
+                  fontSize: '0.85rem',
+                  letterSpacing: '2px',
+                  display: 'block',
+                  mb: 1
+                }}
+              >
+                STEP 3 OF 4
+              </Typography>
+              <Typography variant={isMobile ? "h5" : "h4"} gutterBottom sx={{ fontWeight: 700, color: 'secondary.main', mb: 1 }}>
+                Personal Information
+              </Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 4, display: 'flex', alignItems: 'center', gap: 1 }}>
+                <MedicalServices color="primary" sx={{ fontSize: 20 }} />
+                Help us personalize your healthcare experience
+              </Typography>
+
+              <Grid container spacing={isMobile ? 2 : 3}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    type="date"
+                    label="Date of Birth"
+                    value={formData.dateOfBirth}
+                    onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
+                    InputLabelProps={{ shrink: true }}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormControl fullWidth size={isMobile ? "small" : "medium"}>
+                    <InputLabel>Blood Type</InputLabel>
+                    <Select
+                      value={formData.bloodType}
+                      label="Blood Type"
+                      onChange={(e) => setFormData({...formData, bloodType: e.target.value})}
+                      sx={{
+                        borderRadius: 2,
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'primary.main',
+                        },
+                      }}
+                    >
+                      {bloodTypes.map((type) => (
+                        <MenuItem key={type} value={type}>{type}</MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Address"
+                    multiline
+                    rows={isMobile ? 2 : 3}
+                    value={formData.address}
+                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                    size={isMobile ? "small" : "medium"}
+                    placeholder="Your residential address"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Allergies (if any)"
+                    multiline
+                    rows={isMobile ? 2 : 3}
+                    value={formData.allergies}
+                    onChange={(e) => setFormData({...formData, allergies: e.target.value})}
+                    placeholder="List any allergies separated by commas"
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                
+                <Grid item xs={12}>
+                  <Divider sx={{ my: 2 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
+                      Emergency Contact
+                    </Typography>
+                  </Divider>
+                </Grid>
+                
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Emergency Contact Name"
+                    value={formData.emergencyContactName}
+                    onChange={(e) => setFormData({...formData, emergencyContactName: e.target.value})}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Emergency Contact Phone"
+                    value={formData.emergencyContactPhone}
+                    onChange={(e) => setFormData({...formData, emergencyContactPhone: e.target.value})}
+                    size={isMobile ? "small" : "medium"}
+                    placeholder="0712345678"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                
+                <Grid item xs={12}>
+                  <Divider sx={{ my: 2 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>
+                      Insurance Information (Optional)
+                    </Typography>
+                  </Divider>
+                </Grid>
+                
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Insurance Provider"
+                    value={formData.insuranceProvider}
+                    onChange={(e) => setFormData({...formData, insuranceProvider: e.target.value})}
+                    size={isMobile ? "small" : "medium"}
+                    placeholder="e.g., NHIF, AAR, Jubilee"
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label="Insurance Number"
+                    value={formData.insuranceNumber}
+                    onChange={(e) => setFormData({...formData, insuranceNumber: e.target.value})}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{
+                      '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '&:hover fieldset': {
+                          borderColor: 'primary.main',
+                        },
+                      },
+                    }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  type="date"
-                  label="Date of Birth"
-                  value={formData.dateOfBirth}
-                  onChange={(e) => setFormData({...formData, dateOfBirth: e.target.value})}
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Blood Type</InputLabel>
-                  <Select
-                    value={formData.bloodType}
-                    label="Blood Type"
-                    onChange={(e) => setFormData({...formData, bloodType: e.target.value})}
-                  >
-                    {bloodTypes.map((type) => (
-                      <MenuItem key={type} value={type}>{type}</MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Address"
-                  multiline
-                  rows={2}
-                  value={formData.address}
-                  onChange={(e) => setFormData({...formData, address: e.target.value})}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Allergies (if any)"
-                  multiline
-                  rows={2}
-                  value={formData.allergies}
-                  onChange={(e) => setFormData({...formData, allergies: e.target.value})}
-                  placeholder="List any allergies separated by commas"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                  Emergency Contact
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Emergency Contact Name"
-                  value={formData.emergencyContactName}
-                  onChange={(e) => setFormData({...formData, emergencyContactName: e.target.value})}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Emergency Contact Phone"
-                  value={formData.emergencyContactPhone}
-                  onChange={(e) => setFormData({...formData, emergencyContactPhone: e.target.value})}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-                  Insurance Information (Optional)
-                </Typography>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Insurance Provider"
-                  value={formData.insuranceProvider}
-                  onChange={(e) => setFormData({...formData, insuranceProvider: e.target.value})}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Insurance Number"
-                  value={formData.insuranceNumber}
-                  onChange={(e) => setFormData({...formData, insuranceNumber: e.target.value})}
-                />
-              </Grid>
-            </Grid>
+            </Box>
           );
         }
 
@@ -549,16 +841,16 @@ const SignUp = () => {
               }
             </Alert>
             
-            <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+            <Typography variant={isMobile ? "h6" : "h5"} gutterBottom sx={{ fontWeight: 'bold' }}>
               Ready to Join GraceCare Hospital!
             </Typography>
             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
               Please review your information and click "Complete Registration" to create your account.
             </Typography>
 
-            <Card variant="outlined" sx={{ mb: 3 }}>
+            <Card variant="outlined" sx={{ mb: 3, borderRadius: 3, borderColor: 'primary.light' }}>
               <CardContent>
-                <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <Assignment color="primary" />
                   Account Summary
                 </Typography>
@@ -594,8 +886,17 @@ const SignUp = () => {
 
                 {formData.role === 'doctor' ? (
                   <>
-                    <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
-                      <LocalHospital color="primary" />
+                    <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
+                      <Box
+                        component="img"
+                        src="/doctoricon.jpg"
+                        alt="Doctor"
+                        sx={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 1
+                        }}
+                      />
                       Professional Information
                     </Typography>
                     
@@ -636,7 +937,7 @@ const SignUp = () => {
                   </>
                 ) : (
                   <>
-                    <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
+                    <Typography variant={isMobile ? "body1" : "h6"} gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 2 }}>
                       <MedicalServices color="primary" />
                       Patient Information
                     </Typography>
@@ -688,19 +989,29 @@ const SignUp = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md" sx={{ py: 4 }}>
-      <Paper elevation={3} sx={{ p: { xs: 3, md: 6 } }}>
+    <Container component="main" maxWidth="md" sx={{ py: isMobile ? 2 : 4 }}>
+      <Paper elevation={isMobile ? 1 : 3} sx={{ p: isMobile ? 2 : { xs: 3, md: 6 }, borderRadius: 4, boxShadow: '0 8px 32px rgba(20, 184, 166, 0.12)' }}>
         <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <LocalHospital sx={{ fontSize: 64, color: 'primary.main', mb: 2 }} />
-          <Typography variant="h4" gutterBottom sx={{ fontWeight: 700, color: 'secondary.main' }}>
-            Join our healthcare community
+          <Box
+            component="img"
+            src="/logo.jpg"
+            alt="GraceCare Logo"
+            sx={{
+              height: isMobile ? 50 : 60,
+              width: 'auto',
+              mb: 2,
+              borderRadius: 2,
+            }}
+          />
+          <Typography variant={isMobile ? "h5" : "h4"} gutterBottom sx={{ fontWeight: 700, color: 'secondary.main' }}>
+            Join GraceCare Hospital
           </Typography>
-          <Typography variant="h6" color="text.secondary">
-            in {steps.length} simple steps
+          <Typography variant={isMobile ? "body1" : "h6"} color="text.secondary">
+            Create your account in {steps.length} simple steps
           </Typography>
         </Box>
 
-        <Stepper activeStep={activeStep} sx={{ mb: 6 }}>
+        <Stepper activeStep={activeStep} sx={{ mb: 6 }} orientation={isMobile ? "vertical" : "horizontal"}>
           {steps.map((label, index) => (
             <Step key={label}>
               <StepLabel>
@@ -708,7 +1019,7 @@ const SignUp = () => {
                 {index === 1 && <Assignment sx={{ mr: 1 }} />}
                 {index === 2 && formData.role === 'doctor' ? <LocalHospital sx={{ mr: 1 }} /> : <MedicalServices sx={{ mr: 1 }} />}
                 {index === 3 && <CheckCircle sx={{ mr: 1 }} />}
-                {label}
+                {isMobile ? label.split(' ')[0] : label}
               </StepLabel>
             </Step>
           ))}
@@ -723,11 +1034,15 @@ const SignUp = () => {
         <Box component="form">
           {renderStepContent(activeStep)}
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4, flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 2 : 0 }}>
             <Button
               onClick={handleBack}
               disabled={activeStep === 0 || loading}
-              sx={{ visibility: activeStep === 0 ? 'hidden' : 'visible' }}
+              sx={{ 
+                visibility: activeStep === 0 ? 'hidden' : 'visible',
+                width: isMobile ? '100%' : 'auto'
+              }}
+              size={isMobile ? "large" : "medium"}
             >
               Back
             </Button>
@@ -738,7 +1053,17 @@ const SignUp = () => {
                 onClick={handleSubmit}
                 disabled={loading}
                 startIcon={<CheckCircle />}
-                sx={{ px: 4 }}
+                sx={{ 
+                  px: 4,
+                  width: isMobile ? '100%' : 'auto',
+                  background: 'linear-gradient(135deg, #14B8A6 0%, #6EE7B7 100%)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #0F9488 0%, #4ADE80 100%)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 24px rgba(20, 184, 166, 0.3)'
+                  }
+                }}
+                size={isMobile ? "large" : "medium"}
               >
                 {loading ? 'Creating Account...' : 'Complete Registration'}
               </Button>
@@ -746,7 +1071,17 @@ const SignUp = () => {
               <Button
                 variant="contained"
                 onClick={handleNext}
-                sx={{ px: 4 }}
+                sx={{ 
+                  px: 4,
+                  width: isMobile ? '100%' : 'auto',
+                  background: 'linear-gradient(135deg, #14B8A6 0%, #6EE7B7 100%)',
+                  '&:hover': {
+                    background: 'linear-gradient(135deg, #0F9488 0%, #4ADE80 100%)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 8px 24px rgba(20, 184, 166, 0.3)'
+                  }
+                }}
+                size={isMobile ? "large" : "medium"}
               >
                 Next
               </Button>

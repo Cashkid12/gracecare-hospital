@@ -86,13 +86,17 @@ const Login = () => {
         {/* Left Side - Welcome Message */}
         <Grid item xs={12} md={6}>
           <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
-            <LocalHospital 
-              sx={{ 
-                fontSize: 80, 
-                color: 'primary.main', 
+            <Box
+              component="img"
+              src="/logo.jpg"
+              alt="GraceCare Logo"
+              sx={{
+                height: 80,
+                width: 'auto',
                 mb: 2,
-                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
-              }} 
+                borderRadius: 2,
+                filter: 'drop-shadow(0 4px 8px rgba(20, 184, 166, 0.2))'
+              }}
             />
             <Typography 
               variant="h3" 
@@ -100,7 +104,7 @@ const Login = () => {
               sx={{ 
                 fontWeight: 700, 
                 color: 'secondary.main',
-                background: 'linear-gradient(45deg, #2B9ED8, #003B73)',
+                background: 'linear-gradient(45deg, #14B8A6, #6EE7B7)',
                 backgroundClip: 'text',
                 textFillColor: 'transparent',
                 WebkitBackgroundClip: 'text',
@@ -119,7 +123,7 @@ const Login = () => {
             {/* Features List */}
             <Box sx={{ mt: 4 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                <MedicalServices sx={{ color: 'success.main', mr: 2 }} />
+                <MedicalServices sx={{ color: 'primary.main', mr: 2 }} />
                 <Typography variant="body1">Book appointments easily</Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -127,7 +131,17 @@ const Login = () => {
                 <Typography variant="body1">Access medical records</Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <LocalHospital sx={{ color: 'secondary.main', mr: 2 }} />
+                <Box
+                  component="img"
+                  src="/doctoricon.jpg"
+                  alt="Doctor Icon"
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    mr: 2,
+                    borderRadius: 1
+                  }}
+                />
                 <Typography variant="body1">Connect with healthcare professionals</Typography>
               </Box>
             </Box>
@@ -143,7 +157,8 @@ const Login = () => {
               borderRadius: 4,
               background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
               border: '1px solid',
-              borderColor: 'divider'
+              borderColor: 'divider',
+              boxShadow: '0 8px 32px rgba(20, 184, 166, 0.12)'
             }}
           >
             <Box sx={{ textAlign: 'center', mb: 3 }}>
@@ -173,13 +188,31 @@ const Login = () => {
                 >
                   <MenuItem value="patient">
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Person />
+                      <Box
+                        component="img"
+                        src="/sickicon.jpg"
+                        alt="Patient"
+                        sx={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 1
+                        }}
+                      />
                       <Typography>Patient</Typography>
                     </Box>
                   </MenuItem>
                   <MenuItem value="doctor">
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <LocalHospital />
+                      <Box
+                        component="img"
+                        src="/doctoricon.jpg"
+                        alt="Doctor"
+                        sx={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 1
+                        }}
+                      />
                       <Typography>Doctor</Typography>
                     </Box>
                   </MenuItem>
@@ -238,11 +271,11 @@ const Login = () => {
                   fontSize: '1.1rem',
                   fontWeight: 600,
                   mb: 3,
-                  background: 'linear-gradient(45deg, #2B9ED8, #003B73)',
+                  background: 'linear-gradient(135deg, #14B8A6 0%, #6EE7B7 100%)',
                   '&:hover': {
-                    background: 'linear-gradient(45deg, #0070B8, #001A49)',
+                    background: 'linear-gradient(135deg, #0F9488 0%, #4ADE80 100%)',
                     transform: 'translateY(-2px)',
-                    boxShadow: '0 8px 25px rgba(43, 158, 216, 0.3)'
+                    boxShadow: '0 8px 24px rgba(20, 184, 166, 0.3)'
                   },
                   transition: 'all 0.3s ease'
                 }}
@@ -276,7 +309,7 @@ const Login = () => {
                     color: 'primary.main',
                     '&:hover': {
                       borderColor: 'primary.dark',
-                      backgroundColor: 'primary.50',
+                      backgroundColor: 'rgba(240, 253, 250, 0.5)',
                       transform: 'translateY(-1px)'
                     },
                     transition: 'all 0.3s ease'
@@ -315,8 +348,9 @@ const Login = () => {
             sx={{ 
               mt: 3, 
               p: 2,
-              backgroundColor: 'info.50',
-              borderColor: 'info.main'
+              backgroundColor: 'rgba(240, 253, 250, 0.3)',
+              borderColor: 'primary.light',
+              borderRadius: 3
             }}
           >
             <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>

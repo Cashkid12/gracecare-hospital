@@ -1,389 +1,418 @@
-import React from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  Grid,
-  Card,
-  CardContent,
-  CardActions,
-  Paper,
-  alpha,
-} from '@mui/material';
-import {
-  LocalHospital as HospitalIcon,
-  Emergency as EmergencyIcon,
-  Favorite as HeartIcon,
-  ChildFriendly as ChildIcon,
-  Psychology as BrainIcon,
-} from '@mui/icons-material';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Button, Container, Grid, Card, CardContent, IconButton, Collapse } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { LocalHospital, Favorite, Security, People, ExpandMore } from '@mui/icons-material';
+import Navbar from '../components/layout/Navbar';
+import Footer from '../components/layout/Footer';
 
 const Home = () => {
   const navigate = useNavigate();
+  const [expandedService, setExpandedService] = useState(null);
+  const [isVisible, setIsVisible] = useState({});
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('[data-animate]').forEach((el) => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const services = [
     {
-      icon: <HeartIcon sx={{ fontSize: 48, color: 'primary.main' }} />,
-      title: 'Cardiology',
-      description: 'Comprehensive heart care with advanced diagnostic tools and treatment options.',
-      link: '/departments#cardiology',
+      icon: <LocalHospital sx={{ fontSize: 40, color: '#14B8A6' }} />,
+      title: '24/7 Emergency Care',
+      description: 'Round-the-clock emergency services with experienced medical professionals ready to handle any critical situation.'
     },
     {
-      icon: <ChildIcon sx={{ fontSize: 48, color: 'primary.main' }} />,
-      title: 'Pediatrics',
-      description: 'Specialized care for children from infancy through adolescence.',
-      link: '/departments#pediatrics',
+      icon: <Favorite sx={{ fontSize: 40, color: '#14B8A6' }} />,
+      title: 'Specialized Departments',
+      description: 'Expert care across Cardiology, Pediatrics, Orthopedics, Neurology, and more with state-of-the-art facilities.'
     },
     {
-      icon: <HospitalIcon sx={{ fontSize: 48, color: 'primary.main' }} />,
-      title: 'Dental Care',
-      description: 'Complete dental services for maintaining optimal oral health.',
-      link: '/departments#dental',
+      icon: <Security sx={{ fontSize: 40, color: '#14B8A6' }} />,
+      title: 'Advanced Diagnostics',
+      description: 'Cutting-edge diagnostic technology including MRI, CT scans, and comprehensive laboratory services.'
     },
     {
-      icon: <BrainIcon sx={{ fontSize: 48, color: 'primary.main' }} />,
-      title: 'Neurology',
-      description: 'Expert care for disorders of the nervous system and brain.',
-      link: '/departments#neurology',
-    },
+      icon: <People sx={{ fontSize: 40, color: '#14B8A6' }} />,
+      title: 'Patient-Centered Care',
+      description: 'Compassionate, personalized treatment plans tailored to each patient\'s unique needs and circumstances.'
+    }
   ];
 
-  const handleBookAppointment = () => {
-    navigate('/signup');
-  };
-
-  const handleEmergencyCall = () => {
-    window.location.href = 'tel:+1555123HELP';
-  };
-
-  const handleLearnMore = (link) => {
-    navigate(link);
-  };
-
   return (
-    <Box>
+    <Box sx={{ bgcolor: '#FAFAFA' }}>
+      <Navbar />
+
       {/* Hero Section */}
       <Box
+        id="hero"
+        data-animate
         sx={{
-          background: `linear-gradient(135deg, ${alpha('#2B9ED8', 0.9)} 0%, ${alpha('#003B73', 0.9)} 100%), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80') center/cover`,
-          color: 'white',
-          py: { xs: 10, md: 15 },
-          textAlign: 'center',
+          minHeight: { xs: 'auto', md: '90vh' },
+          py: { xs: 6, md: 12 },
+          background: 'linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 50%, #FFFFFF 100%)',
           position: 'relative',
           overflow: 'hidden',
+          opacity: isVisible.hero ? 1 : 0,
+          transform: isVisible.hero ? 'translateY(0)' : 'translateY(30px)',
+          transition: 'all 0.8s ease-out'
         }}
       >
         <Container maxWidth="lg">
-          <Typography 
-            variant="h1" 
-            gutterBottom 
-            sx={{ 
-              fontWeight: 700,
-              fontSize: { xs: '2.5rem', md: '3.5rem' },
-              textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
-            }}
-          >
-            Your Health, Our Priority
-          </Typography>
-          <Typography 
-            variant="h5" 
-            sx={{ 
-              mb: 4, 
-              maxWidth: 600, 
-              mx: 'auto',
-              fontSize: { xs: '1.1rem', md: '1.5rem' },
-              textShadow: '1px 1px 2px rgba(0,0,0,0.3)',
-            }}
-          >
-            Experience world-class healthcare with compassionate medical professionals dedicated to your well-being.
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleBookAppointment}
-              sx={{
-                bgcolor: 'success.main',
-                px: { xs: 4, md: 6 },
-                py: 1.5,
-                fontSize: { xs: '1rem', md: '1.1rem' },
-                fontWeight: 600,
-                '&:hover': {
-                  bgcolor: 'success.dark',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 8px 25px rgba(91, 212, 122, 0.3)',
-                },
-                transition: 'all 0.3s ease',
-              }}
-            >
-              Book Appointment
-            </Button>
-            <Button
-              variant="outlined"
-              size="large"
-              onClick={() => navigate('/doctors')}
-              sx={{
-                borderColor: 'white',
-                color: 'white',
-                px: { xs: 4, md: 6 },
-                py: 1.5,
-                fontSize: { xs: '1rem', md: '1.1rem' },
-                fontWeight: 600,
-                '&:hover': {
-                  bgcolor: 'white',
-                  color: 'primary.main',
-                  transform: 'translateY(-2px)',
-                },
-                transition: 'all 0.3s ease',
-              }}
-            >
-              Find a Doctor
-            </Button>
-          </Box>
+          <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
+            <Grid item xs={12} md={6} order={{ xs: 1, md: 1 }}>
+              <Box sx={{ textAlign: { xs: 'center', md: 'left' }, px: { xs: 2, md: 0 } }}>
+                <Typography
+                  variant="h2"
+                  sx={{
+                    fontSize: { xs: '2rem', sm: '2.5rem', md: '3.5rem' },
+                    fontWeight: 800,
+                    color: '#14B8A6',
+                    mb: 2,
+                    lineHeight: 1.2
+                  }}
+                >
+                  Welcome to GraceCare Hospital
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontSize: { xs: '1rem', md: '1.25rem' },
+                    color: '#666',
+                    mb: 4,
+                    lineHeight: 1.6
+                  }}
+                >
+                  Your health is our priority. Experience compassionate, world-class medical care with our team of expert healthcare professionals.
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' }, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={() => navigate('/book-appointment')}
+                    sx={{
+                      background: 'linear-gradient(135deg, #14B8A6 0%, #6EE7B7 100%)',
+                      px: 4,
+                      py: 1.5,
+                      fontSize: { xs: '0.9rem', md: '1rem' },
+                      borderRadius: 3,
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      boxShadow: '0 8px 20px rgba(20, 184, 166, 0.3)',
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 12px 30px rgba(20, 184, 166, 0.4)'
+                      }
+                    }}
+                  >
+                    Book Appointment
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    size="large"
+                    onClick={() => navigate('/services')}
+                    sx={{
+                      borderColor: '#14B8A6',
+                      color: '#14B8A6',
+                      px: 4,
+                      py: 1.5,
+                      fontSize: { xs: '0.9rem', md: '1rem' },
+                      borderRadius: 3,
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      borderWidth: 2,
+                      transition: 'all 0.3s ease',
+                      '&:hover': {
+                        borderWidth: 2,
+                        borderColor: '#14B8A6',
+                        bgcolor: 'rgba(20, 184, 166, 0.05)',
+                        transform: 'translateY(-2px)'
+                      }
+                    }}
+                  >
+                    Our Services
+                  </Button>
+                </Box>
+              </Box>
+            </Grid>
+
+            <Grid item xs={12} md={6} order={{ xs: 2, md: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center', mt: { xs: 3, md: 0 } }}>
+                <Box
+                  component="img"
+                  src="/logo.jpg"
+                  alt="GraceCare Hospital"
+                  sx={{
+                    width: { xs: '200px', sm: '250px', md: '400px' },
+                    height: 'auto',
+                    borderRadius: 4,
+                    boxShadow: '0 20px 60px rgba(20, 184, 166, 0.2)',
+                    animation: 'float 3s ease-in-out infinite',
+                    '@keyframes float': {
+                      '0%, 100%': { transform: 'translateY(0px)' },
+                      '50%': { transform: 'translateY(-10px)' }
+                    }
+                  }}
+                />
+              </Box>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
 
       {/* Services Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Typography 
-          variant="h2" 
-          textAlign="center" 
-          gutterBottom 
-          sx={{ 
-            fontWeight: 700,
-            fontSize: { xs: '2rem', md: '2.5rem' },
-            color: 'secondary.main',
-          }}
-        >
-          Our Services
-        </Typography>
-        <Typography 
-          variant="h6" 
-          textAlign="center" 
-          color="text.secondary" 
-          sx={{ 
-            mb: 6,
-            fontSize: { xs: '1rem', md: '1.25rem' },
-            maxWidth: 600,
-            mx: 'auto',
-          }}
-        >
-          Comprehensive healthcare services for you and your family
-        </Typography>
-
-        <Grid container spacing={4}>
-          {services.map((service, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card 
-                sx={{ 
-                  height: '100%', 
-                  textAlign: 'center', 
-                  p: 3,
-                  transition: 'all 0.3s ease',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: '0 12px 35px rgba(0, 0, 0, 0.15)',
-                  },
-                }}
-              >
-                <CardContent>
-                  <Box sx={{ 
-                    display: 'inline-flex', 
-                    p: 2, 
-                    borderRadius: 3,
-                    bgcolor: 'primary.light',
-                    color: 'white',
-                    mb: 2,
-                  }}>
-                    {service.icon}
-                  </Box>
-                  <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, color: 'secondary.main' }}>
-                    {service.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    {service.description}
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ justifyContent: 'center' }}>
-                  <Button 
-                    size="small" 
-                    color="primary"
-                    onClick={() => handleLearnMore(service.link)}
-                    sx={{ fontWeight: 600 }}
-                  >
-                    Learn More
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-
-        {/* Additional CTA */}
-        <Box sx={{ textAlign: 'center', mt: 6 }}>
-          <Button
-            variant="outlined"
-            size="large"
-            onClick={() => navigate('/services')}
-            sx={{
-              px: 4,
-              py: 1.5,
-              fontSize: '1.1rem',
-              fontWeight: 600,
-              borderWidth: 2,
-              '&:hover': {
-                borderWidth: 2,
-                transform: 'translateY(-2px)',
-              },
-              transition: 'all 0.3s ease',
-            }}
-          >
-            View All Services
-          </Button>
-        </Box>
-      </Container>
-
-      {/* Emergency Section */}
-      <Paper
+      <Box
+        id="services"
+        data-animate
         sx={{
-          bgcolor: 'error.main',
-          color: 'white',
-          py: 8,
-          textAlign: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%)',
-          },
+          py: { xs: 6, md: 10 },
+          bgcolor: 'white',
+          opacity: isVisible.services ? 1 : 0,
+          transform: isVisible.services ? 'translateY(0)' : 'translateY(30px)',
+          transition: 'all 0.8s ease-out 0.2s'
         }}
       >
-        <Container maxWidth="md">
-          <EmergencyIcon sx={{ fontSize: 64, mb: 3, position: 'relative', zIndex: 1 }} />
-          <Typography variant="h3" gutterBottom sx={{ fontWeight: 700, position: 'relative', zIndex: 1 }}>
-            Emergency Hotline
-          </Typography>
-          <Typography variant="h2" gutterBottom sx={{ fontWeight: 700, position: 'relative', zIndex: 1 }}>
-            +1 (555) 123-HELP
-          </Typography>
-          <Typography variant="h6" sx={{ mb: 4, position: 'relative', zIndex: 1 }}>
-            24/7 Emergency Medical Services
-          </Typography>
-          <Button
-            variant="contained"
-            size="large"
-            onClick={handleEmergencyCall}
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
             sx={{
-              bgcolor: 'white',
-              color: 'error.main',
-              px: 6,
-              py: 1.5,
-              fontSize: '1.1rem',
+              fontSize: { xs: '1.75rem', md: '2.5rem' },
               fontWeight: 700,
-              '&:hover': {
-                bgcolor: 'grey.100',
-                transform: 'scale(1.05)',
-              },
-              transition: 'all 0.3s ease',
-              position: 'relative',
-              zIndex: 1,
+              textAlign: 'center',
+              color: '#14B8A6',
+              mb: 2
             }}
           >
-            Call Now
-          </Button>
-        </Container>
-      </Paper>
+            Our Services
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              textAlign: 'center',
+              color: '#666',
+              mb: { xs: 4, md: 6 },
+              maxWidth: 600,
+              mx: 'auto',
+              px: 2
+            }}
+          >
+            Comprehensive healthcare services designed for your wellbeing
+          </Typography>
 
-      {/* Stats Section */}
-      <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Grid container spacing={4} textAlign="center">
-          <Grid item xs={6} sm={3}>
-            <Typography variant="h2" color="primary.main" gutterBottom sx={{ fontWeight: 700 }}>
-              50+
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>Expert Doctors</Typography>
-            <Typography variant="body2" color="text.secondary">Qualified Professionals</Typography>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Typography variant="h2" color="primary.main" gutterBottom sx={{ fontWeight: 700 }}>
-              10K+
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>Happy Patients</Typography>
-            <Typography variant="body2" color="text.secondary">Satisfied Customers</Typography>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Typography variant="h2" color="primary.main" gutterBottom sx={{ fontWeight: 700 }}>
-              15+
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>Departments</Typography>
-            <Typography variant="body2" color="text.secondary">Medical Specialties</Typography>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Typography variant="h2" color="primary.main" gutterBottom sx={{ fontWeight: 700 }}>
-              24/7
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>Emergency Care</Typography>
-            <Typography variant="body2" color="text.secondary">Always Available</Typography>
-          </Grid>
-        </Grid>
-      </Container>
-
-      {/* Why Choose Us Section */}
-      <Box sx={{ bgcolor: 'background.paper', py: 8 }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={6} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <Typography variant="h2" gutterBottom sx={{ fontWeight: 700, color: 'secondary.main' }}>
-                Why Choose GraceCare Hospital?
-              </Typography>
-              <Typography variant="h6" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
-                We are committed to providing exceptional healthcare services with state-of-the-art technology, 
-                experienced medical professionals, and a patient-centered approach.
-              </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {[
-                  'Advanced Medical Technology',
-                  'Experienced Healthcare Professionals',
-                  'Patient-Centered Care Approach',
-                  '24/7 Emergency Services',
-                  'Comprehensive Medical Specialties',
-                  'Affordable Healthcare Solutions'
-                ].map((feature, index) => (
-                  <Box key={index} sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Box sx={{ 
-                      width: 8, 
-                      height: 8, 
-                      bgcolor: 'success.main', 
-                      borderRadius: '50%',
-                      mr: 2,
-                    }} />
-                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                      {feature}
+          <Grid container spacing={{ xs: 2, md: 3 }}>
+            {services.map((service, index) => (
+              <Grid item xs={12} sm={6} md={6} lg={3} key={index}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    borderRadius: 3,
+                    boxShadow: '0 4px 20px rgba(20, 184, 166, 0.08)',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    opacity: isVisible.services ? 1 : 0,
+                    transform: isVisible.services ? 'scale(1)' : 'scale(0.9)',
+                    transitionDelay: `${index * 0.1}s`,
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: '0 12px 40px rgba(20, 184, 166, 0.15)'
+                    }
+                  }}
+                  onClick={() => setExpandedService(expandedService === index ? null : index)}
+                >
+                  <CardContent sx={{ p: { xs: 2.5, md: 3 }, textAlign: 'center' }}>
+                    <Box sx={{ mb: 2 }}>{service.icon}</Box>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontSize: { xs: '1rem', md: '1.1rem' },
+                        fontWeight: 600,
+                        color: '#333',
+                        mb: 1
+                      }}
+                    >
+                      {service.title}
                     </Typography>
-                  </Box>
-                ))}
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Box
+                    <Collapse in={expandedService === index}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: '#666',
+                          fontSize: { xs: '0.85rem', md: '0.9rem' },
+                          lineHeight: 1.6
+                        }}
+                      >
+                        {service.description}
+                      </Typography>
+                    </Collapse>
+                    <IconButton
+                      size="small"
+                      sx={{
+                        mt: 1,
+                        transform: expandedService === index ? 'rotate(180deg)' : 'rotate(0)',
+                        transition: 'transform 0.3s ease'
+                      }}
+                    >
+                      <ExpandMore sx={{ color: '#14B8A6' }} />
+                    </IconButton>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Why Choose Us */}
+      <Box
+        id="why-choose"
+        data-animate
+        sx={{
+          py: { xs: 6, md: 10 },
+          bgcolor: '#F0FDFA',
+          opacity: isVisible['why-choose'] ? 1 : 0,
+          transform: isVisible['why-choose'] ? 'translateX(0)' : 'translateX(-30px)',
+          transition: 'all 0.8s ease-out'
+        }}
+      >
+        <Container maxWidth="lg">
+          <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
+            <Grid item xs={12} md={7}>
+              <Typography
+                variant="h3"
                 sx={{
-                  height: 400,
-                  background: `url('https://images.unsplash.com/photo-1551076805-e1869033e561?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80') center/cover`,
-                  borderRadius: 4,
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+                  fontSize: { xs: '1.75rem', md: '2.5rem' },
+                  fontWeight: 700,
+                  color: '#14B8A6',
+                  mb: 3,
+                  textAlign: { xs: 'center', md: 'left' }
                 }}
-              />
+              >
+                Why Choose GraceCare?
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: { xs: '0.95rem', md: '1.1rem' },
+                  color: '#555',
+                  lineHeight: 1.8,
+                  mb: 2,
+                  textAlign: { xs: 'center', md: 'left' },
+                  px: { xs: 1, md: 0 }
+                }}
+              >
+                At GraceCare Hospital, we combine cutting-edge medical technology with compassionate care. Our team of board-certified physicians and healthcare professionals are dedicated to providing personalized treatment plans that prioritize your health and wellbeing.
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontSize: { xs: '0.95rem', md: '1.1rem' },
+                  color: '#555',
+                  lineHeight: 1.8,
+                  textAlign: { xs: 'center', md: 'left' },
+                  px: { xs: 1, md: 0 }
+                }}
+              >
+                With state-of-the-art facilities and a patient-first approach, we ensure every visit is comfortable, efficient, and focused on achieving the best possible outcomes for you and your family.
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={5}>
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: 2, md: 0 } }}>
+                <Box
+                  component="img"
+                  src="/service.jpg"
+                  alt="Why Choose Us"
+                  sx={{
+                    width: { xs: '80%', sm: '70%', md: '100%' },
+                    maxWidth: 350,
+                    height: 'auto',
+                    borderRadius: 4,
+                    boxShadow: '0 20px 60px rgba(20, 184, 166, 0.2)'
+                  }}
+                />
+              </Box>
             </Grid>
           </Grid>
         </Container>
       </Box>
+
+      {/* CTA Section */}
+      <Box
+        id="cta"
+        data-animate
+        sx={{
+          py: { xs: 6, md: 8 },
+          background: 'linear-gradient(135deg, #14B8A6 0%, #6EE7B7 100%)',
+          textAlign: 'center',
+          opacity: isVisible.cta ? 1 : 0,
+          transform: isVisible.cta ? 'scale(1)' : 'scale(0.95)',
+          transition: 'all 0.8s ease-out'
+        }}
+      >
+        <Container maxWidth="md">
+          <Typography
+            variant="h4"
+            sx={{
+              fontSize: { xs: '1.5rem', md: '2rem' },
+              fontWeight: 700,
+              color: 'white',
+              mb: 2
+            }}
+          >
+            Ready to Experience Quality Healthcare?
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              fontSize: { xs: '0.95rem', md: '1.1rem' },
+              color: 'rgba(255, 255, 255, 0.95)',
+              mb: 4,
+              px: { xs: 2, md: 0 }
+            }}
+          >
+            Book your appointment today and take the first step towards better health
+          </Typography>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={() => navigate('/book-appointment')}
+            sx={{
+              bgcolor: 'white',
+              color: '#14B8A6',
+              px: 5,
+              py: 1.5,
+              fontSize: { xs: '0.95rem', md: '1.1rem' },
+              borderRadius: 3,
+              textTransform: 'none',
+              fontWeight: 600,
+              boxShadow: '0 8px 30px rgba(0, 0, 0, 0.2)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                bgcolor: 'white',
+                transform: 'translateY(-3px)',
+                boxShadow: '0 12px 40px rgba(0, 0, 0, 0.3)'
+              }
+            }}
+          >
+            Get Started Now
+          </Button>
+        </Container>
+      </Box>
+
+      <Footer />
     </Box>
   );
 };

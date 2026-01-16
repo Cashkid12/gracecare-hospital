@@ -54,26 +54,26 @@ const Contact = () => {
     {
       icon: <PhoneIcon sx={{ fontSize: 32, color: 'primary.main' }} />,
       title: 'Emergency Hotline',
-      details: '+1 (555) 123-HELP',
+      details: '0701747503',
       description: '24/7 Emergency Services',
     },
     {
       icon: <PhoneIcon sx={{ fontSize: 32, color: 'primary.main' }} />,
       title: 'Main Line',
-      details: '+1 (555) 123-4567',
+      details: '0729526791',
       description: 'Mon - Fri, 8:00 AM - 8:00 PM',
     },
     {
       icon: <EmailIcon sx={{ fontSize: 32, color: 'primary.main' }} />,
       title: 'Email',
-      details: 'info@gracecare.com',
+      details: 'gracecare@gmail.com',
       description: 'We respond within 24 hours',
     },
     {
       icon: <LocationIcon sx={{ fontSize: 32, color: 'primary.main' }} />,
       title: 'Location',
-      details: '123 Healthcare Avenue',
-      description: 'Medical District, City 10001',
+      details: 'Kasarani, Nairobi',
+      description: 'Kenya',
     },
   ];
 
@@ -82,17 +82,29 @@ const Contact = () => {
       {/* Hero Section */}
       <Box
         sx={{
-          background: `linear-gradient(135deg, ${alpha('#2B9ED8', 0.9)} 0%, ${alpha('#003B73', 0.9)} 100%), url('https://images.unsplash.com/photo-1586773860418-d37222d8fce3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80') center/cover`,
-          color: 'white',
-          py: 10,
+          background: 'linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 100%)',
+          py: 8,
           textAlign: 'center',
         }}
       >
         <Container maxWidth="lg">
-          <Typography variant="h2" gutterBottom sx={{ fontWeight: 700 }}>
+          <Typography 
+            variant="overline" 
+            sx={{ 
+              color: 'primary.main', 
+              fontWeight: 700, 
+              fontSize: '0.85rem',
+              letterSpacing: '2px',
+              display: 'block',
+              mb: 1
+            }}
+          >
+            GET IN TOUCH
+          </Typography>
+          <Typography variant="h2" gutterBottom sx={{ fontWeight: 700, color: 'secondary.main', mb: 2 }}>
             Contact Us
           </Typography>
-          <Typography variant="h5" sx={{ maxWidth: 800, mx: 'auto' }}>
+          <Typography variant="body1" sx={{ maxWidth: 700, mx: 'auto', color: 'text.secondary' }}>
             Get in touch with us. We're here to help you with all your healthcare needs.
           </Typography>
         </Container>
@@ -146,7 +158,7 @@ const Contact = () => {
                 🚨 Emergency Contact
               </Typography>
               <Typography variant="h4" gutterBottom sx={{ fontWeight: 700 }}>
-                +1 (555) 123-HELP
+                0701747503
               </Typography>
               <Typography variant="body2">
                 24/7 Emergency Medical Services Available
