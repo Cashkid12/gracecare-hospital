@@ -3,8 +3,12 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./config/database');
 
-// Load env vars
-dotenv.config();
+// Load env vars - but don't fail if .env is missing (for production)
+try {
+  dotenv.config();
+} catch (error) {
+  console.log('.env file not found - using environment variables');
+}
 
 // Connect to database
 connectDB();
@@ -22,7 +26,7 @@ app.use('/api/appointments', require('./routes/appointments'));
 app.use('/api/doctors', require('./routes/doctors'));
 app.use('/api/patients', require('./routes/patients'));
 app.use('/api/departments', require('./routes/departments'));
-app.use('/api/admin', require('./routes/admin')); // Add admin routes
+app.use('/api/admin', require('./routes/admin'));
 
 // Basic route
 app.get('/', (req, res) => {
@@ -117,18 +121,13 @@ app.use((error, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 5000;
+// ✅ FIXED PORT BINDING FOR RENDER
+const PORT = process.env.PORT || 10000;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
   console.log(`🏥 GraceCare Hospital API is ready!`);
-  console.log(`📍 Base URL: http://localhost:${PORT}`);
-  console.log(`❤️  Health check: http://localhost:${PORT}/health`);
-  console.log(`📚 API Info: http://localhost:${PORT}/api`);
-  console.log(`🔐 Auth: http://localhost:${PORT}/api/auth`);
-  console.log(`👨‍⚕️ Doctors: http://localhost:${PORT}/api/doctors`);
-  console.log(`👤 Patients: http://localhost:${PORT}/api/patients`);
-  console.log(`📅 Appointments: http://localhost:${PORT}/api/appointments`);
-  console.log(`🏢 Departments: http://localhost:${PORT}/api/departments`);
-  console.log(`⚙️  Admin: http://localhost:${PORT}/api/admin`);
+  console.log(`📍 Base URL: http://0.0.0.0:${PORT}`);
+  console.log(`❤️  Health check: http://0.0.0.0:${PORT}/health`);
+  console.log(`📚 API Info: http://0.0.0.0:${PORT}/api`);
 });
