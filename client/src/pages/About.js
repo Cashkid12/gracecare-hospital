@@ -73,13 +73,32 @@ const About = () => {
         </Container>
       </Box>
 
-      {/* Mission & Vision */}
-      <Box sx={{ bgcolor: 'background.paper', py: { xs: 8, md: 12 } }}>
+      {/* Mission & Vision - Asymmetric Layout */}
+      <Box sx={{ bgcolor: 'background.paper', py: { xs: 8, md: 12 }, position: 'relative', overflow: 'visible' }}>
         <Container maxWidth="lg">
-          <Grid container spacing={{ xs: 4, md: 6 }} alignItems="center">
-            {/* Text Content - LEFT */}
-            <Grid item xs={12} md={7}>
-              <Box sx={{ px: { xs: 2, md: 0 } }}>
+          <Box sx={{ position: 'relative', minHeight: { xs: 'auto', md: '70vh' } }}>
+            {/* Text Content - TOP LEFT */}
+            <Box
+              sx={{
+                position: { md: 'absolute' },
+                top: { md: 0 },
+                left: { md: 0 },
+                width: { xs: '100%', md: '55%' },
+                zIndex: 3,
+                mb: { xs: 6, md: 0 },
+              }}
+            >
+              <Box 
+                sx={{ 
+                  px: { xs: 3, md: 5 },
+                  py: { xs: 4, md: 6 },
+                  bgcolor: 'rgba(255, 255, 255, 0.98)',
+                  borderRadius: 4,
+                  boxShadow: '0 25px 60px rgba(20, 184, 166, 0.15)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(20, 184, 166, 0.1)',
+                }}
+              >
                 <Typography variant="h3" gutterBottom sx={{ fontWeight: 700, color: 'secondary.main' }}>
                   Our Mission
                 </Typography>
@@ -97,23 +116,30 @@ const About = () => {
                   medical innovation, and community health improvement across the region.
                 </Typography>
               </Box>
-            </Grid>
+            </Box>
 
-            {/* Image - RIGHT */}
-            <Grid item xs={12} md={5}>
+            {/* About Image - BOTTOM RIGHT (Overlapping) */}
+            <Box
+              sx={{
+                position: { md: 'absolute' },
+                bottom: { md: '-60px' },
+                right: { md: 0 },
+                width: { xs: '100%', md: '52%' },
+                zIndex: 2,
+              }}
+            >
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  opacity: 0,
-                  transform: 'translateX(30px)',
-                  animation: 'slideInRight 1s ease-out 0.3s forwards',
-                  '@keyframes slideInRight': {
-                    to: {
-                      opacity: 1,
-                      transform: 'translateX(0)'
-                    }
-                  }
+                  position: 'relative',
+                  height: { xs: 400, md: 500 },
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  boxShadow: '0 30px 80px rgba(20, 184, 166, 0.25)',
+                  transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                  '&:hover': {
+                    transform: 'translateY(-8px) scale(1.02)',
+                    boxShadow: '0 40px 100px rgba(20, 184, 166, 0.35)',
+                  },
                 }}
               >
                 <Box
@@ -122,23 +148,18 @@ const About = () => {
                   alt="GraceCare Hospital Team"
                   onError={(e) => {
                     e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = '<div style="color: white; text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #14B8A6 0%, #6EE7B7 100%); height: 400px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600; border-radius: 16px;">GraceCare Hospital</div>';
+                    e.target.parentElement.innerHTML = '<div style="color: white; text-align: center; padding: 20px; background: linear-gradient(135deg, #14B8A6 0%, #6EE7B7 100%); height: 100%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 600;">GraceCare Hospital</div>';
                   }}
                   sx={{
+                    height: '100%',
                     width: '100%',
-                    maxWidth: 450,
-                    height: 'auto',
-                    borderRadius: 4,
-                    boxShadow: '0 30px 80px rgba(20, 184, 166, 0.25)',
-                    transition: 'transform 0.3s ease',
-                    '&:hover': {
-                      transform: 'scale(1.05)'
-                    }
+                    objectFit: 'cover',
+                    objectPosition: 'center',
                   }}
                 />
               </Box>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Container>
       </Box>
 
