@@ -73,7 +73,7 @@ const Home = () => {
       >
         <Container maxWidth="lg">
           <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
-            <Grid item xs={12} md={6} order={{ xs: 1, md: 1 }}>
+            <Grid item xs={12} md={6}>
               <Box sx={{ textAlign: { xs: 'center', md: 'left' }, px: { xs: 2, md: 0 } }}>
                 <Typography
                   variant="h2"
@@ -150,21 +150,30 @@ const Home = () => {
               </Box>
             </Grid>
 
-            <Grid item xs={12} md={6} order={{ xs: 2, md: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center', mt: { xs: 3, md: 0 } }}>
+            <Grid item xs={12} md={6}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  opacity: isVisible.hero ? 1 : 0,
+                  transform: isVisible.hero ? 'translateX(0)' : 'translateX(30px)',
+                  transition: 'all 1s ease-out 0.3s'
+                }}
+              >
                 <Box
                   component="img"
                   src="/doctor1.jpg"
                   alt="GraceCare Hospital"
                   sx={{
-                    width: { xs: '200px', sm: '250px', md: '400px' },
+                    width: '100%',
+                    maxWidth: { xs: '300px', sm: '350px', md: '450px' },
                     height: 'auto',
                     borderRadius: 4,
-                    boxShadow: '0 20px 60px rgba(20, 184, 166, 0.2)',
-                    animation: 'float 3s ease-in-out infinite',
-                    '@keyframes float': {
-                      '0%, 100%': { transform: 'translateY(0px)' },
-                      '50%': { transform: 'translateY(-10px)' }
+                    boxShadow: '0 20px 60px rgba(20, 184, 166, 0.25)',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.05)'
                     }
                   }}
                 />
@@ -330,17 +339,29 @@ const Home = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} md={5}>
-              <Box sx={{ display: 'flex', justifyContent: 'center', mt: { xs: 2, md: 0 } }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  opacity: isVisible['why-choose'] ? 1 : 0,
+                  transform: isVisible['why-choose'] ? 'translateX(0)' : 'translateX(30px)',
+                  transition: 'all 1s ease-out 0.4s'
+                }}
+              >
                 <Box
                   component="img"
                   src="/service.jpg"
                   alt="Why Choose Us"
                   sx={{
-                    width: { xs: '80%', sm: '70%', md: '100%' },
-                    maxWidth: 350,
+                    width: '100%',
+                    maxWidth: 400,
                     height: 'auto',
                     borderRadius: 4,
-                    boxShadow: '0 20px 60px rgba(20, 184, 166, 0.2)'
+                    boxShadow: '0 20px 60px rgba(20, 184, 166, 0.25)',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.05)'
+                    }
                   }}
                 />
               </Box>
