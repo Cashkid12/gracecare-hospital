@@ -124,14 +124,16 @@ const About = () => {
                 position: { md: 'absolute' },
                 bottom: { md: '-60px' },
                 right: { md: 0 },
-                width: { xs: '100%', md: '52%' },
+                width: { xs: '90%', md: '52%' },
                 zIndex: 2,
+                mt: { xs: -4, md: 0 },
+                ml: 'auto',
               }}
             >
               <Box
                 sx={{
                   position: 'relative',
-                  height: { xs: 400, md: 500 },
+                  height: { xs: 300, md: 500 },
                   borderRadius: 4,
                   overflow: 'hidden',
                   boxShadow: '0 30px 80px rgba(20, 184, 166, 0.25)',

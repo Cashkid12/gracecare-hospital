@@ -174,9 +174,9 @@ const Home = () => {
             <Box
               sx={{
                 position: 'absolute',
-                bottom: 0,
+                bottom: { xs: '-20px', md: 0 },
                 right: 0,
-                width: { xs: '100%', md: '50%' },
+                width: { xs: '90%', md: '50%' },
                 zIndex: 2,
                 display: 'flex',
                 justifyContent: 'center',
@@ -185,7 +185,7 @@ const Home = () => {
               <Box
                 sx={{
                   position: 'relative',
-                  height: { xs: 350, md: 450 },
+                  height: { xs: 300, md: 450 },
                   width: '100%',
                   borderRadius: 4,
                   overflow: 'hidden',
@@ -205,7 +205,7 @@ const Home = () => {
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    objectPosition: 'center',
+                    objectPosition: 'top center', // Focus on faces
                   }}
                 />
               </Box>
@@ -392,16 +392,16 @@ const Home = () => {
             <Box
               sx={{
                 position: 'absolute',
-                bottom: 0,
+                bottom: { xs: '-10px', md: 0 },
                 right: 0,
-                width: { xs: '100%', md: '45%' },
+                width: { xs: '85%', md: '45%' },
                 zIndex: 2,
               }}
             >
               <Box
                 sx={{
                   position: 'relative',
-                  height: { xs: 300, md: 400 },
+                  height: { xs: 250, md: 400 },
                   borderRadius: 4,
                   overflow: 'hidden',
                   boxShadow: '0 30px 80px rgba(20, 184, 166, 0.25)',
