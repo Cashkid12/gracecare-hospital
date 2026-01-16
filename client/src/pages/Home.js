@@ -154,7 +154,7 @@ const Home = () => {
               <Box sx={{ display: 'flex', justifyContent: { xs: 'center', md: 'flex-end' }, alignItems: 'center', mt: { xs: 3, md: 0 } }}>
                 <Box
                   component="img"
-                  src="/logo.jpg"
+                  src="/doctor1.jpg"
                   alt="GraceCare Hospital"
                   sx={{
                     width: { xs: '200px', sm: '250px', md: '400px' },

@@ -100,10 +100,11 @@ const Navbar = () => {
           src="/logo.jpg"
           alt="GraceCare Logo"
           sx={{
-            height: 40,
-            width: 'auto',
-            mr: 2,
+            height: 50,
+            width: 50,
+            mr: 1.5,
             borderRadius: 1,
+            objectFit: 'cover'
           }}
         />
         <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'secondary.main' }}>
@@ -223,10 +224,11 @@ const Navbar = () => {
             src="/logo.jpg"
             alt="GraceCare Logo"
             sx={{
-              height: 45,
-              width: 'auto',
-              mr: 2,
+              height: 50,
+              width: 50,
+              mr: 1.5,
               borderRadius: 1,
+              objectFit: 'cover'
             }}
           />
           <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: 'secondary.main' }}>
