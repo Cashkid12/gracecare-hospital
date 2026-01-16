@@ -56,7 +56,7 @@ const Home = () => {
     <Box sx={{ bgcolor: '#FAFAFA' }}>
       <Navbar />
 
-      {/* Hero Section */}
+      {/* Hero Section - Asymmetric Layout */}
       <Box
         id="hero"
         data-animate
@@ -72,9 +72,29 @@ const Home = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Grid container spacing={{ xs: 3, md: 4 }} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <Box sx={{ textAlign: { xs: 'center', md: 'left' }, px: { xs: 2, md: 0 } }}>
+          <Box sx={{ position: 'relative', minHeight: { md: '70vh' } }}>
+            {/* Text Content - TOP LEFT */}
+            <Box
+              sx={{
+                position: { md: 'absolute' },
+                top: { md: 0 },
+                left: { md: 0 },
+                width: { xs: '100%', md: '52%' },
+                zIndex: 3,
+                mb: { xs: 4, md: 0 },
+              }}
+            >
+              <Box 
+                sx={{ 
+                  pt: { md: 8 },
+                  px: { xs: 3, md: 4 },
+                  py: { xs: 4, md: 5 },
+                  bgcolor: 'rgba(255, 255, 255, 0.95)',
+                  borderRadius: 4,
+                  boxShadow: '0 20px 60px rgba(20, 184, 166, 0.15)',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
                 <Typography
                   variant="h2"
                   sx={{
@@ -98,7 +118,7 @@ const Home = () => {
                 >
                   Your health is our priority. Experience compassionate, world-class medical care with our team of expert healthcare professionals.
                 </Typography>
-                <Box sx={{ display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' }, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                   <Button
                     variant="contained"
                     size="large"
@@ -148,17 +168,33 @@ const Home = () => {
                   </Button>
                 </Box>
               </Box>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} md={6}>
+            {/* Image - BOTTOM RIGHT (Overlapping) */}
+            <Box
+              sx={{
+                position: { md: 'absolute' },
+                bottom: { md: '-100px' },
+                right: { md: 0 },
+                width: { xs: '100%', md: '50%' },
+                zIndex: 2,
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
               <Box
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  opacity: isVisible.hero ? 1 : 0,
-                  transform: isVisible.hero ? 'translateX(0)' : 'translateX(30px)',
-                  transition: 'all 1s ease-out 0.3s'
+                  position: 'relative',
+                  height: { xs: 350, md: 450 },
+                  width: '100%',
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  boxShadow: '0 30px 80px rgba(20, 184, 166, 0.25)',
+                  transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                  '&:hover': {
+                    transform: 'translateY(-8px) scale(1.02)',
+                    boxShadow: '0 40px 100px rgba(20, 184, 166, 0.35)',
+                  },
                 }}
               >
                 <Box
@@ -167,19 +203,14 @@ const Home = () => {
                   alt="GraceCare Hospital"
                   sx={{
                     width: '100%',
-                    maxWidth: { xs: '300px', sm: '350px', md: '450px' },
-                    height: 'auto',
-                    borderRadius: 4,
-                    boxShadow: '0 20px 60px rgba(20, 184, 166, 0.25)',
-                    transition: 'transform 0.3s ease',
-                    '&:hover': {
-                      transform: 'scale(1.05)'
-                    }
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'center',
                   }}
                 />
               </Box>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Container>
       </Box>
 
