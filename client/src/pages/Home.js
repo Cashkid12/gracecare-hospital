@@ -62,7 +62,7 @@ const Home = () => {
         data-animate
         sx={{
           minHeight: { xs: 'auto', md: '90vh' },
-          py: { xs: 6, md: 15 },
+          py: { xs: 6, md: 12 },
           background: 'linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 100%)',
           position: 'relative',
           overflow: 'visible',
@@ -72,7 +72,7 @@ const Home = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ position: 'relative', minHeight: { md: '70vh' } }}>
+          <Box sx={{ position: 'relative', minHeight: { md: '75vh' } }}>
             {/* Text Content - TOP LEFT */}
             <Box
               sx={{
@@ -174,7 +174,7 @@ const Home = () => {
             <Box
               sx={{
                 position: { md: 'absolute' },
-                bottom: { md: '-100px' },
+                bottom: { md: '-80px' },
                 right: { md: 0 },
                 width: { xs: '100%', md: '50%' },
                 zIndex: 2,
@@ -219,7 +219,7 @@ const Home = () => {
         id="services"
         data-animate
         sx={{
-          py: { xs: 6, md: 10 },
+          py: { xs: 6, md: 8 },
           bgcolor: 'white',
           opacity: isVisible.services ? 1 : 0,
           transform: isVisible.services ? 'translateY(0)' : 'translateY(30px)',
@@ -321,7 +321,7 @@ const Home = () => {
         id="why-choose"
         data-animate
         sx={{
-          py: { xs: 6, md: 10 },
+          py: { xs: 6, md: 8 },
           bgcolor: '#F0FDFA',
           position: 'relative',
           overflow: 'visible',
@@ -331,7 +331,7 @@ const Home = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ position: 'relative', minHeight: { md: '60vh' } }}>
+          <Box sx={{ position: 'relative', minHeight: { md: '55vh' } }}>
             {/* Text Content - TOP LEFT */}
             <Box
               sx={{
@@ -392,7 +392,7 @@ const Home = () => {
             <Box
               sx={{
                 position: { md: 'absolute' },
-                bottom: { md: '-60px' },
+                bottom: { md: '-50px' },
                 right: { md: 0 },
                 width: { xs: '100%', md: '45%' },
                 zIndex: 2,
@@ -434,7 +434,7 @@ const Home = () => {
         id="cta"
         data-animate
         sx={{
-          py: { xs: 6, md: 8 },
+          py: { xs: 6, md: 7 },
           background: 'linear-gradient(135deg, #14B8A6 0%, #6EE7B7 100%)',
           textAlign: 'center',
           opacity: isVisible.cta ? 1 : 0,
