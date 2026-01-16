@@ -53,7 +53,7 @@ const Home = () => {
   ];
 
   return (
-    <Box sx={{ bgcolor: '#FAFAFA' }}>
+    <Box sx={{ bgcolor: '#FAFAFA', position: 'relative' }}>
       <Navbar />
 
       {/* Hero Section - Asymmetric Layout */}
@@ -61,18 +61,18 @@ const Home = () => {
         id="hero"
         data-animate
         sx={{
-          minHeight: { xs: 'auto', md: '90vh' },
-          py: { xs: 6, md: 12 },
+          minHeight: { xs: 'auto', md: '85vh' },
+          py: { xs: 6, md: 10 },
           background: 'linear-gradient(135deg, #F0FDFA 0%, #CCFBF1 100%)',
           position: 'relative',
-          overflow: 'visible',
+          overflow: 'hidden',
           opacity: isVisible.hero ? 1 : 0,
           transform: isVisible.hero ? 'translateY(0)' : 'translateY(30px)',
           transition: 'all 0.8s ease-out'
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ position: 'relative', minHeight: { md: '75vh' } }}>
+          <Box sx={{ position: 'relative', minHeight: { md: '65vh' }, mb: { md: 8 } }}>
             {/* Text Content - TOP LEFT */}
             <Box
               sx={{
@@ -174,7 +174,7 @@ const Home = () => {
             <Box
               sx={{
                 position: { md: 'absolute' },
-                bottom: { md: '-80px' },
+                bottom: { md: 0 },
                 right: { md: 0 },
                 width: { xs: '100%', md: '50%' },
                 zIndex: 2,
@@ -324,14 +324,14 @@ const Home = () => {
           py: { xs: 6, md: 8 },
           bgcolor: '#F0FDFA',
           position: 'relative',
-          overflow: 'visible',
+          overflow: 'hidden',
           opacity: isVisible['why-choose'] ? 1 : 0,
           transform: isVisible['why-choose'] ? 'translateX(0)' : 'translateX(-30px)',
           transition: 'all 0.8s ease-out'
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ position: 'relative', minHeight: { md: '55vh' } }}>
+          <Box sx={{ position: 'relative', minHeight: { md: '50vh' }, mb: { md: 6 } }}>
             {/* Text Content - TOP LEFT */}
             <Box
               sx={{
@@ -392,7 +392,7 @@ const Home = () => {
             <Box
               sx={{
                 position: { md: 'absolute' },
-                bottom: { md: '-50px' },
+                bottom: { md: 0 },
                 right: { md: 0 },
                 width: { xs: '100%', md: '45%' },
                 zIndex: 2,
