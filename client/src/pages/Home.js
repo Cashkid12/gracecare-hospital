@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Box, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
@@ -11,7 +11,7 @@ const Home = () => {
     <Box sx={{ bgcolor: '#FAFAFA', position: 'relative' }}>
       <Navbar />
       
-      {/* Simple Hero Section */}
+      {/* Hero Section */}
       <Box
         sx={{
           minHeight: '85vh',
