@@ -344,18 +344,35 @@ export const profileService = {
 
 // Admin Services
 export const adminService = {
+  // Stats
+  getDashboardStats: () => 
+    api.get('/api/admin/dashboard/stats'),
+
   // User Management
   getUsers: () => 
     api.get('/api/admin/users'),
   
+  getDoctors: () => 
+    api.get('/api/admin/doctors'),
+  
+  getPatients: () => 
+    api.get('/api/admin/patients'),
+  
   getUser: (id) => 
     api.get(`/api/admin/users/${id}`),
   
-  updateUser: (id, userData) => 
-    api.put(`/api/admin/users/${id}`, userData),
+  updateUserStatus: (id, isActive) => 
+    api.put(`/api/admin/users/${id}/status`, { isActive }),
   
   deleteUser: (id) => 
     api.delete(`/api/admin/users/${id}`),
+  
+  // Appointment Management
+  getAppointments: () => 
+    api.get('/api/admin/appointments'),
+  
+  updateAppointment: (id, updateData) => 
+    api.put(`/api/appointments/${id}`, updateData), // Using main appointment update but as admin
   
   // Analytics
   getAnalytics: () => 

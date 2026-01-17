@@ -212,11 +212,30 @@ const Navbar = () => {
   );
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: 'white', color: 'text.primary', boxShadow: 2 }}>
-      <Toolbar>
+    <AppBar 
+      position="sticky" 
+      sx={{ 
+        backgroundColor: 'rgba(255, 255, 255, 0.95)', 
+        backdropFilter: 'blur(10px)',
+        color: 'text.primary', 
+        boxShadow: '0 2px 20px rgba(0, 0, 0, 0.08)',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
+        py: 1
+      }}
+    >
+      <Toolbar sx={{ minHeight: '72px !important' }}>
         {/* Logo */}
         <Box 
-          sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', flexGrow: isMobile ? 1 : 0 }}
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            cursor: 'pointer', 
+            flexGrow: isMobile ? 1 : 0,
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              transform: 'scale(1.02)'
+            }
+          }}
           onClick={() => navigate('/')}
         >
           <Box
@@ -224,34 +243,68 @@ const Navbar = () => {
             src="/Logo.jpg"
             alt="GraceCare Logo"
             sx={{
-              height: 50,
-              width: 50,
-              mr: 1.5,
-              borderRadius: 1,
-              objectFit: 'cover'
+              height: 48,
+              width: 48,
+              mr: 2,
+              borderRadius: '12px',
+              objectFit: 'cover',
+              boxShadow: '0 4px 12px rgba(20, 184, 166, 0.2)',
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                boxShadow: '0 8px 24px rgba(20, 184, 166, 0.3)',
+                transform: 'translateY(-2px)'
+              }
             }}
           />
-          <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', color: 'secondary.main' }}>
+          <Typography 
+            variant="h6" 
+            component="div" 
+            sx={{ 
+              fontWeight: 700, 
+              color: '#14B8A6',
+              fontSize: { xs: '1.125rem', sm: '1.25rem' }
+            }}
+          >
             {isMobile ? 'GraceCare' : 'GraceCare Hospital'}
           </Typography>
         </Box>
         
         {/* Desktop Navigation Links */}
         {!isMobile && (
-          <Box sx={{ display: 'flex', gap: 2, ml: 4, flexGrow: 1 }}>
+          <Box sx={{ display: 'flex', gap: 1, ml: 6, flexGrow: 1 }}>
             {navItems.map((item) => (
               <Button 
                 key={item.label} 
                 color="inherit" 
                 onClick={() => navigate(item.path)}
                 sx={{
-                  fontWeight: 600,
-                  color: 'secondary.main',
+                  fontWeight: 500,
+                  color: '#64748B',
+                  px: 2,
+                  py: 1,
+                  borderRadius: '8px',
+                  position: 'relative',
                   '&:hover': {
-                    color: 'primary.main',
-                    bgcolor: 'rgba(20, 184, 166, 0.08)',
+                    color: '#14B8A6',
+                    bgcolor: 'rgba(20, 184, 166, 0.05)',
+                    transform: 'translateY(-2px)'
                   },
-                  transition: 'all 0.3s ease',
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                  '&::after': {
+                    content: '""',
+                    position: 'absolute',
+                    bottom: 0,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    width: 0,
+                    height: '2px',
+                    backgroundColor: '#14B8A6',
+                    transition: 'width 0.3s ease',
+                    borderRadius: '1px'
+                  },
+                  '&:hover::after': {
+                    width: '70%'
+                  }
                 }}
               >
                 {item.label}
@@ -270,7 +323,14 @@ const Navbar = () => {
                   <Button 
                     variant="contained" 
                     onClick={() => navigate('/book-appointment')}
-                    sx={{ mr: 1 }}
+                    sx={{ 
+                      mr: 2,
+                      boxShadow: '0 4px 16px rgba(20, 184, 166, 0.3)',
+                      '&:hover': {
+                        boxShadow: '0 8px 24px rgba(20, 184, 166, 0.4)',
+                        transform: 'translateY(-2px)'
+                      }
+                    }}
                   >
                     Book Appointment
                   </Button>
@@ -284,38 +344,128 @@ const Navbar = () => {
                   sx={{ 
                     display: 'flex', 
                     alignItems: 'center',
-                    gap: 1 
+                    gap: 1.5,
+                    px: 2,
+                    py: 1,
+                    borderRadius: '12px',
+                    bgcolor: 'rgba(20, 184, 166, 0.05)',
+                    color: '#14B8A6',
+                    fontWeight: 500,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      bgcolor: 'rgba(20, 184, 166, 0.1)',
+                      transform: 'translateY(-2px)'
+                    }
                   }}
                 >
-                  {user.firstName} {user.lastName}
-                  <Typography variant="body2" sx={{ ml: 1, textTransform: 'capitalize' }}>
-                    ({user.role})
-                  </Typography>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600, lineHeight: 1.2 }}>
+                      {user.firstName} {user.lastName}
+                    </Typography>
+                    <Typography variant="caption" sx={{ textTransform: 'capitalize', opacity: 0.8 }}>
+                      {user.role}
+                    </Typography>
+                  </Box>
                 </Button>
                 <Menu
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
+                  PaperProps={{
+                    elevation: 8,
+                    sx: {
+                      mt: 1.5,
+                      borderRadius: '12px',
+                      minWidth: 200,
+                      overflow: 'hidden',
+                      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)'
+                    }
+                  }}
                 >
-                  <MenuItem onClick={handleDashboard}>
-                    <Dashboard sx={{ mr: 2 }} />
-                    Dashboard
+                  <MenuItem 
+                    onClick={handleDashboard}
+                    sx={{
+                      py: 1.5,
+                      px: 2,
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        bgcolor: 'rgba(20, 184, 166, 0.05)'
+                      }
+                    }}
+                  >
+                    <Dashboard sx={{ mr: 2, color: '#14B8A6' }} />
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>Dashboard</Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                        Access your dashboard
+                      </Typography>
+                    </Box>
                   </MenuItem>
-                  <MenuItem onClick={handleProfile}>
-                    <Person sx={{ mr: 2 }} />
-                    My Profile
+                  <MenuItem 
+                    onClick={handleProfile}
+                    sx={{
+                      py: 1.5,
+                      px: 2,
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        bgcolor: 'rgba(20, 184, 166, 0.05)'
+                      }
+                    }}
+                  >
+                    <Person sx={{ mr: 2, color: '#14B8A6' }} />
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>My Profile</Typography>
+                      <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                        View and edit profile
+                      </Typography>
+                    </Box>
                   </MenuItem>
-                  <MenuItem onClick={handleLogout}>
-                    Logout
+                  <Divider />
+                  <MenuItem 
+                    onClick={handleLogout}
+                    sx={{
+                      py: 1.5,
+                      px: 2,
+                      color: '#EF4444',
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        bgcolor: 'rgba(239, 68, 68, 0.05)'
+                      }
+                    }}
+                  >
+                    <Box sx={{ width: 24, mr: 2 }} />
+                    <Typography variant="body2" sx={{ fontWeight: 500 }}>Logout</Typography>
                   </MenuItem>
                 </Menu>
               </>
             ) : (
               <>
-                <Button color="inherit" onClick={() => navigate('/login')}>
+                <Button 
+                  color="inherit" 
+                  onClick={() => navigate('/login')}
+                  sx={{
+                    color: '#64748B',
+                    fontWeight: 500,
+                    px: 2,
+                    '&:hover': {
+                      color: '#14B8A6',
+                      bgcolor: 'rgba(20, 184, 166, 0.05)'
+                    }
+                  }}
+                >
                   Login
                 </Button>
-                <Button variant="outlined" onClick={() => navigate('/signup')}>
+                <Button 
+                  variant="contained" 
+                  onClick={() => navigate('/signup')}
+                  sx={{
+                    boxShadow: '0 4px 16px rgba(20, 184, 166, 0.3)',
+                    '&:hover': {
+                      boxShadow: '0 8px 24px rgba(20, 184, 166, 0.4)',
+                      transform: 'translateY(-2px)'
+                    }
+                  }}
+                >
                   Sign Up
                 </Button>
               </>

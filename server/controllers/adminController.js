@@ -124,9 +124,20 @@ const getAllPatients = async (req, res) => {
 const getAllAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.find()
-      .populate('patient', 'firstName lastName email')
-      .populate('doctor')
-      .populate('doctor.user', 'firstName lastName')
+      .populate({
+        path: 'patient',
+        populate: {
+          path: 'user',
+          select: 'firstName lastName email phone'
+        }
+      })
+      .populate({
+        path: 'doctor',
+        populate: {
+          path: 'user',
+          select: 'firstName lastName email'
+        }
+      })
       .sort({ appointmentDate: -1, appointmentTime: -1 });
 
     res.json({

@@ -161,7 +161,7 @@ const getAppointment = async (req, res) => {
 // @access  Private
 const updateAppointment = async (req, res) => {
   try {
-    const { status, notes, prescription } = req.body;
+    const { status, notes, prescription, appointmentDate, appointmentTime, doctorId } = req.body;
 
     const appointment = await Appointment.findById(req.params.id);
     
@@ -186,10 +186,22 @@ const updateAppointment = async (req, res) => {
       }
     }
 
-    // Update fields
+    // Admin and relevant doctor/patient can update status
     if (status) appointment.status = status;
     if (notes) appointment.notes = notes;
     if (prescription) appointment.prescription = prescription;
+
+    // Admin can also update date, time and assigned doctor
+    if (req.user.role === 'admin') {
+      if (appointmentDate) appointment.appointmentDate = appointmentDate;
+      if (appointmentTime) appointment.appointmentTime = appointmentTime;
+      if (doctorId) {
+        const doctor = await Doctor.findById(doctorId);
+        if (doctor) {
+          appointment.doctor = doctorId;
+        }
+      }
+    }
 
     await appointment.save();
 

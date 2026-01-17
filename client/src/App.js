@@ -56,8 +56,15 @@ import MedicalHistory from './pages/medical/MedicalHistory';
 
 // Admin Management Pages
 import AdminUsers from './pages/dashboard/admin/AdminUserManagement';
+import AdminDoctors from './pages/dashboard/admin/AdminDoctorManagement';
+import AdminPatients from './pages/dashboard/admin/AdminPatientManagement';
 import AdminAppointments from './pages/dashboard/admin/AdminAppointmentManagement';
 import AdminDepartments from './pages/dashboard/admin/AdminDepartmentManagement';
+import AdminMedicalRecords from './pages/dashboard/admin/AdminMedicalRecords';
+import AdminPrescriptions from './pages/dashboard/admin/AdminPrescriptions';
+import AdminPayments from './pages/dashboard/admin/AdminPayments';
+import AdminContent from './pages/dashboard/admin/AdminContentManagement';
+import AdminMessages from './pages/dashboard/admin/AdminMessages';
 import AdminAnalytics from './pages/dashboard/admin/AdminAnalytics';
 import AdminSettings from './pages/dashboard/admin/AdminSettings';
 
@@ -91,20 +98,42 @@ const theme = createTheme({
   typography: {
     fontFamily: '"Poppins", "Roboto", "Arial", sans-serif',
     h1: {
-      fontWeight: 700,
-      fontSize: '3rem',
+      fontWeight: 800,
+      fontSize: '3.5rem',
+      lineHeight: 1.2,
     },
     h2: {
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: '2.5rem',
+      lineHeight: 1.25,
     },
     h3: {
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: '2rem',
+      lineHeight: 1.3,
     },
     h4: {
-      fontWeight: 500,
+      fontWeight: 600,
       fontSize: '1.5rem',
+      lineHeight: 1.35,
+    },
+    h5: {
+      fontWeight: 600,
+      fontSize: '1.25rem',
+      lineHeight: 1.4,
+    },
+    h6: {
+      fontWeight: 600,
+      fontSize: '1.125rem',
+      lineHeight: 1.4,
+    },
+    body1: {
+      fontSize: '1rem',
+      lineHeight: 1.6,
+    },
+    body2: {
+      fontSize: '0.875rem',
+      lineHeight: 1.5,
     },
     button: {
       textTransform: 'none',
@@ -118,11 +147,15 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: '8px',
           padding: '10px 24px',
-          boxShadow: '0 2px 8px rgba(20, 184, 166, 0.2)',
+          fontWeight: 500,
+          textTransform: 'none',
+          boxShadow: '0 4px 12px rgba(20, 184, 166, 0.25)',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           '&:hover': {
-            boxShadow: '0 4px 16px rgba(20, 184, 166, 0.3)',
+            boxShadow: '0 8px 24px rgba(20, 184, 166, 0.35)',
+            transform: 'translateY(-2px)',
           },
         },
       },
@@ -130,9 +163,33 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 16,
+          borderRadius: '16px',
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
           border: '1px solid rgba(0, 0, 0, 0.05)',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          '&:hover': {
+            transform: 'translateY(-6px)',
+            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.12)',
+          },
+        },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          boxShadow: '0 2px 20px rgba(0, 0, 0, 0.08)',
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          paddingLeft: '1rem',
+          paddingRight: '1rem',
+          '@media (min-width: 600px)': {
+            paddingLeft: '1.5rem',
+            paddingRight: '1.5rem',
+          },
         },
       },
     },
@@ -373,6 +430,22 @@ function App() {
                   } 
                 />
                 <Route 
+                  path="/admin-doctors" 
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminDashboard><AdminDoctors /></AdminDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin-patients" 
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminDashboard><AdminPatients /></AdminDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
                   path="/admin-appointments" 
                   element={
                     <ProtectedRoute allowedRoles={['admin']}>
@@ -385,6 +458,46 @@ function App() {
                   element={
                     <ProtectedRoute allowedRoles={['admin']}>
                       <AdminDashboard><AdminDepartments /></AdminDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin-medical-records" 
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminDashboard><AdminMedicalRecords /></AdminDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin-prescriptions" 
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminDashboard><AdminPrescriptions /></AdminDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin-payments" 
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminDashboard><AdminPayments /></AdminDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin-content" 
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminDashboard><AdminContent /></AdminDashboard>
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/admin-messages" 
+                  element={
+                    <ProtectedRoute allowedRoles={['admin']}>
+                      <AdminDashboard><AdminMessages /></AdminDashboard>
                     </ProtectedRoute>
                   } 
                 />

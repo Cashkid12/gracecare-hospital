@@ -21,7 +21,8 @@ import {
   Grid,
   Card,
   CardContent,
-  Paper
+  Paper,
+  Button
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -35,7 +36,13 @@ import {
   AccountCircle as AccountIcon,
   ExitToApp as LogoutIcon,
   ChevronLeft as ChevronLeftIcon,
-  Assignment as RecordsIcon
+  Assignment as RecordsIcon,
+  Person as PatientIcon,
+  Medication as RxIcon,
+  Payments as BillingIcon,
+  Web as ContentIcon,
+  Message as MessageIcon,
+  Group as DoctorIcon
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -71,8 +78,15 @@ const AdminDashboard = ({ children }) => {
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin-dashboard' },
     { text: 'User Management', icon: <PeopleIcon />, path: '/admin-users' },
+    { text: 'Doctors', icon: <DoctorIcon />, path: '/admin-doctors' },
+    { text: 'Patients', icon: <PatientIcon />, path: '/admin-patients' },
     { text: 'Appointments', icon: <CalendarIcon />, path: '/admin-appointments' },
     { text: 'Departments', icon: <LocalHospitalIcon />, path: '/admin-departments' },
+    { text: 'Medical Records', icon: <RecordsIcon />, path: '/admin-medical-records' },
+    { text: 'Prescriptions', icon: <RxIcon />, path: '/admin-prescriptions' },
+    { text: 'Payments & Billing', icon: <BillingIcon />, path: '/admin-payments' },
+    { text: 'Content Management', icon: <ContentIcon />, path: '/admin-content' },
+    { text: 'Messages', icon: <MessageIcon />, path: '/admin-messages' },
     { text: 'Analytics', icon: <AnalyticsIcon />, path: '/admin-analytics' },
     { text: 'Settings', icon: <SettingsIcon />, path: '/admin-settings' },
   ];
@@ -285,6 +299,7 @@ const DefaultAdminContent = () => {
     totalPatients: 1247,
     totalDoctors: 48,
     totalAppointments: 324,
+    todayAppointments: 23,
     revenue: 45280
   };
 
@@ -297,23 +312,34 @@ const DefaultAdminContent = () => {
 
   return (
     <Box>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" fontWeight="700" color="secondary.main" gutterBottom>
-          Welcome back, {user?.firstName || 'Admin'}! 👋
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Here's what's happening at GraceCare Hospital today.
-        </Typography>
+      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+        <Box>
+          <Typography variant="h4" fontWeight="700" color="secondary.main" gutterBottom>
+            Welcome back, {user?.firstName || 'Admin'}! 👋
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Here's what's happening at GraceCare Hospital today.
+          </Typography>
+        </Box>
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <Button variant="contained" color="primary" startIcon={<MessageIcon />}>
+            Broadcast
+          </Button>
+          <Button variant="outlined" color="primary" startIcon={<SettingsIcon />}>
+            Quick Setup
+          </Button>
+        </Box>
       </Box>
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {[
-          { title: 'Total Patients', value: stats.totalPatients, icon: <PeopleIcon />, color: '#14B8A6' },
-          { title: 'Total Doctors', value: stats.totalDoctors, icon: <LocalHospitalIcon />, color: '#06B6D4' },
-          { title: 'Daily Appointments', value: stats.totalAppointments, icon: <CalendarIcon />, color: '#6366F1' },
-          { title: 'Monthly Revenue', value: `$${stats.revenue.toLocaleString()}`, icon: <AnalyticsIcon />, color: '#F59E0B' }
+          { title: 'Total Patients', value: stats.totalPatients, icon: <PatientIcon />, color: '#14B8A6' },
+          { title: 'Total Doctors', value: stats.totalDoctors, icon: <DoctorIcon />, color: '#06B6D4' },
+          { title: 'Total Appointments', value: stats.totalAppointments, icon: <CalendarIcon />, color: '#6366F1' },
+          { title: 'Today\'s Appointments', value: stats.todayAppointments, icon: <CalendarIcon />, color: '#8B5CF6' },
+          { title: 'Monthly Revenue', value: `$${stats.revenue.toLocaleString()}`, icon: <BillingIcon />, color: '#F59E0B' }
         ].map((stat, i) => (
-          <Grid item xs={12} sm={6} md={3} key={i}>
+          <Grid item xs={12} sm={6} md={2.4} key={i}>
             <Card sx={{ border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
               <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <Box sx={{ p: 1.5, borderRadius: 3, bgcolor: `${stat.color}15`, color: stat.color }}>
@@ -335,14 +361,14 @@ const DefaultAdminContent = () => {
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 3, borderRadius: 4 }}>
+          <Paper sx={{ p: 3, borderRadius: 4, mb: 3 }}>
             <Typography variant="h6" fontWeight="700" gutterBottom>Recent Activity</Typography>
             <List>
               {recentActivity.map((activity) => (
                 <ListItem key={activity.id} divider sx={{ px: 0 }}>
                   <ListItemIcon sx={{ minWidth: 40 }}>
                     <Avatar sx={{ width: 32, height: 32, bgcolor: `${activity.type}.light`, color: `${activity.type}.main` }}>
-                      {activity.type === 'success' ? '✓' : '!'}
+                      {activity.type === 'success' ? '✓' : activity.type === 'warning' ? '!' : 'i'}
                     </Avatar>
                   </ListItemIcon>
                   <ListItemText 
@@ -353,12 +379,34 @@ const DefaultAdminContent = () => {
               ))}
             </List>
           </Paper>
+
+          <Paper sx={{ p: 3, borderRadius: 4 }}>
+            <Typography variant="h6" fontWeight="700" gutterBottom color="error.main">System Alerts & Notifications</Typography>
+            <Box sx={{ mt: 2 }}>
+              {[
+                { severity: 'warning', message: 'Hospital storage reaching capacity (85%)', time: '1 hour ago' },
+                { severity: 'error', message: 'Failed database connection attempt from unauthorized IP', time: '3 hours ago' },
+                { severity: 'info', message: 'New system-wide update available', time: '5 hours ago' }
+              ].map((alert, i) => (
+                <Box key={i} sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, mb: 2, p: 2, borderRadius: 2, bgcolor: `${alert.severity === 'error' ? '#FEF2F2' : alert.severity === 'warning' ? '#FFFBEB' : '#F0F9FF'}` }}>
+                  <Box sx={{ color: `${alert.severity}.main`, mt: 0.5 }}>
+                    <NotificationsIcon fontSize="small" />
+                  </Box>
+                  <Box sx={{ flexGrow: 1 }}>
+                    <Typography variant="body2" fontWeight="600">{alert.message}</Typography>
+                    <Typography variant="caption" color="text.secondary">{alert.time}</Typography>
+                  </Box>
+                  <Button size="small" color={alert.severity}>View</Button>
+                </Box>
+              ))}
+            </Box>
+          </Paper>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3, borderRadius: 4, bgcolor: 'primary.main', color: 'white' }}>
+          <Paper sx={{ p: 3, borderRadius: 4, bgcolor: 'primary.main', color: 'white', mb: 3 }}>
             <Typography variant="h6" fontWeight="700" gutterBottom>System Health</Typography>
             <Box sx={{ mt: 2 }}>
-              {['Database', 'API Server', 'Auth Service', 'Storage'].map((service) => (
+              {['Database', 'API Server', 'Auth Service', 'Storage', 'Email SMTP'].map((service) => (
                 <Box key={service} sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                   <Typography variant="body2">{service}</Typography>
                   <Badge color="success" variant="dot" sx={{ '& .MuiBadge-badge': { width: 10, height: 10, borderRadius: '50%' } }}>
@@ -366,6 +414,25 @@ const DefaultAdminContent = () => {
                   </Badge>
                 </Box>
               ))}
+            </Box>
+          </Paper>
+
+          <Paper sx={{ p: 3, borderRadius: 4 }}>
+            <Typography variant="h6" fontWeight="700" gutterBottom>Hospital Summary</Typography>
+            <Divider sx={{ my: 2 }} />
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="body2" color="text.secondary">Active Doctors</Typography>
+                <Typography variant="body2" fontWeight="600">42/48</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="body2" color="text.secondary">Bed Occupancy</Typography>
+                <Typography variant="body2" fontWeight="600">78%</Typography>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="body2" color="text.secondary">Pending Approvals</Typography>
+                <Typography variant="body2" fontWeight="600" color="warning.main">15</Typography>
+              </Box>
             </Box>
           </Paper>
         </Grid>
