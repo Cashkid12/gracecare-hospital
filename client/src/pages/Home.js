@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Typography, Container } from '@mui/material';
+import { Box, Typography, Container, Grid, Card, CardContent } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { LocalHospital, Favorite, Security, Groups } from '@mui/icons-material';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 
@@ -97,6 +98,133 @@ const Home = () => {
               </Box>
             </Box>
           </Box>
+        </Container>
+      </Box>
+
+      {/* Services Section */}
+      <Box sx={{ py: 10, bgcolor: 'white' }}>
+        <Container maxWidth="lg">
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: { xs: '1.75rem', md: '2.5rem' },
+              fontWeight: 700,
+              color: '#14B8A6',
+              mb: 2,
+              textAlign: 'center'
+            }}
+          >
+            Our Services
+          </Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              color: '#64748B',
+              mb: 6,
+              textAlign: 'center',
+              maxWidth: '600px',
+              mx: 'auto'
+            }}
+          >
+            Comprehensive healthcare services tailored to your needs
+          </Typography>
+          <Grid container spacing={4}>
+            {[
+              {
+                icon: <LocalHospital sx={{ fontSize: 48, color: '#14B8A6' }} />,
+                title: 'Emergency Care',
+                description: '24/7 emergency services with state-of-the-art facilities'
+              },
+              {
+                icon: <Favorite sx={{ fontSize: 48, color: '#14B8A6' }} />,
+                title: 'Cardiology',
+                description: 'Advanced heart care and cardiovascular treatments'
+              },
+              {
+                icon: <Security sx={{ fontSize: 48, color: '#14B8A6' }} />,
+                title: 'Surgery',
+                description: 'Expert surgical procedures with modern technology'
+              },
+              {
+                icon: <Groups sx={{ fontSize: 48, color: '#14B8A6' }} />,
+                title: 'Pediatrics',
+                description: 'Specialized care for infants, children, and adolescents'
+              }
+            ].map((service, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    borderRadius: 4,
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: '0 12px 40px rgba(20, 184, 166, 0.2)'
+                    }
+                  }}
+                >
+                  <CardContent sx={{ textAlign: 'center', p: 4 }}>
+                    <Box sx={{ mb: 2 }}>{service.icon}</Box>
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: 600, color: '#1E293B', mb: 1 }}
+                    >
+                      {service.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: '#64748B' }}>
+                      {service.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Why Choose Us Section */}
+      <Box sx={{ py: 10, bgcolor: '#FAFAFA' }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={6} alignItems="center">
+            <Grid item xs={12} md={6}>
+              <Box
+                component="img"
+                src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&auto=format&fit=crop"
+                alt="Medical Team"
+                sx={{
+                  width: '100%',
+                  height: { xs: 300, md: 400 },
+                  objectFit: 'cover',
+                  borderRadius: 4,
+                  boxShadow: '0 8px 30px rgba(0,0,0,0.12)'
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography
+                variant="h3"
+                sx={{
+                  fontSize: { xs: '1.75rem', md: '2.25rem' },
+                  fontWeight: 700,
+                  color: '#14B8A6',
+                  mb: 3
+                }}
+              >
+                Why Choose GraceCare?
+              </Typography>
+              <Typography variant="body1" sx={{ color: '#64748B', mb: 2 }}>
+                At GraceCare Hospital, we combine cutting-edge medical technology with compassionate care to deliver exceptional healthcare services.
+              </Typography>
+              <Box component="ul" sx={{ color: '#64748B', pl: 2 }}>
+                <li>Experienced and certified medical professionals</li>
+                <li>State-of-the-art medical equipment and facilities</li>
+                <li>Patient-centered approach to healthcare</li>
+                <li>Comprehensive range of medical services</li>
+                <li>24/7 emergency care availability</li>
+              </Box>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
 
