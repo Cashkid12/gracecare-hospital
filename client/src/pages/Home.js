@@ -186,45 +186,105 @@ const Home = () => {
       {/* Why Choose Us Section */}
       <Box sx={{ py: 10, bgcolor: '#FAFAFA' }}>
         <Container maxWidth="lg">
-          <Grid container spacing={6} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <Box
-                component="img"
-                src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&auto=format&fit=crop"
-                alt="Medical Team"
-                sx={{
-                  width: '100%',
-                  height: { xs: 300, md: 400 },
-                  objectFit: 'cover',
+          <Typography
+            variant="h2"
+            sx={{
+              fontSize: { xs: '1.75rem', md: '2.5rem' },
+              fontWeight: 700,
+              color: '#14B8A6',
+              mb: 6,
+              textAlign: 'center'
+            }}
+          >
+            Why Choose GraceCare?
+          </Typography>
+          <Box sx={{ position: 'relative', height: { xs: 'auto', md: 600 } }}>
+            {/* Text Content - TOP LEFT */}
+            <Box
+              sx={{
+                position: { xs: 'relative', md: 'absolute' },
+                top: 0,
+                left: 0,
+                width: { xs: '100%', md: '55%' },
+                zIndex: 3,
+                mb: { xs: 6, md: 0 },
+              }}
+            >
+              <Box 
+                sx={{ 
+                  px: { xs: 3, md: 5 },
+                  py: { xs: 4, md: 6 },
+                  bgcolor: 'rgba(255, 255, 255, 0.98)',
                   borderRadius: 4,
-                  boxShadow: '0 8px 30px rgba(0,0,0,0.12)'
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography
-                variant="h3"
-                sx={{
-                  fontSize: { xs: '1.75rem', md: '2.25rem' },
-                  fontWeight: 700,
-                  color: '#14B8A6',
-                  mb: 3
+                  boxShadow: '0 25px 60px rgba(20, 184, 166, 0.15)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(20, 184, 166, 0.1)',
                 }}
               >
-                Why Choose GraceCare?
-              </Typography>
-              <Typography variant="body1" sx={{ color: '#64748B', mb: 2 }}>
-                At GraceCare Hospital, we combine cutting-edge medical technology with compassionate care to deliver exceptional healthcare services.
-              </Typography>
-              <Box component="ul" sx={{ color: '#64748B', pl: 2 }}>
-                <li>Experienced and certified medical professionals</li>
-                <li>State-of-the-art medical equipment and facilities</li>
-                <li>Patient-centered approach to healthcare</li>
-                <li>Comprehensive range of medical services</li>
-                <li>24/7 emergency care availability</li>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    fontWeight: 700,
+                    color: '#14B8A6',
+                    mb: 3,
+                    fontSize: { xs: '1.5rem', md: '2rem' }
+                  }}
+                >
+                  Excellence in Healthcare
+                </Typography>
+                <Typography variant="body1" sx={{ color: '#64748B', mb: 3, lineHeight: 1.8 }}>
+                  At GraceCare Hospital, we combine cutting-edge medical technology with compassionate care to deliver exceptional healthcare services.
+                </Typography>
+                <Box component="ul" sx={{ color: '#64748B', pl: 2, '& li': { mb: 1.5 } }}>
+                  <li>Experienced and certified medical professionals</li>
+                  <li>State-of-the-art medical equipment and facilities</li>
+                  <li>Patient-centered approach to healthcare</li>
+                  <li>Comprehensive range of medical services</li>
+                  <li>24/7 emergency care availability</li>
+                </Box>
               </Box>
-            </Grid>
-          </Grid>
+            </Box>
+
+            {/* Image - BOTTOM RIGHT (Overlapping) */}
+            <Box
+              sx={{
+                position: { xs: 'relative', md: 'absolute' },
+                bottom: { xs: 0, md: '-60px' },
+                right: 0,
+                width: { xs: '100%', md: '52%' },
+                zIndex: 2,
+                mt: { xs: -4, md: 0 },
+                ml: { xs: 0, md: 'auto' },
+              }}
+            >
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: { xs: 300, md: 500 },
+                  borderRadius: 4,
+                  overflow: 'hidden',
+                  boxShadow: '0 30px 80px rgba(20, 184, 166, 0.25)',
+                  transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                  '&:hover': {
+                    transform: 'translateY(-8px) scale(1.02)',
+                    boxShadow: '0 40px 100px rgba(20, 184, 166, 0.35)',
+                  },
+                }}
+              >
+                <Box
+                  component="img"
+                  src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&auto=format&fit=crop"
+                  alt="Medical Team"
+                  sx={{
+                    height: '100%',
+                    width: '100%',
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
         </Container>
       </Box>
 
