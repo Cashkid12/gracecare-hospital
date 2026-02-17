@@ -39,6 +39,14 @@ const patientSchema = mongoose.Schema(
         },
       },
     ],
+    assignedDoctor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Doctor'
+    },
+    medicalNotes: {
+      type: String,
+      trim: true
+    },
   },
   {
     timestamps: true,

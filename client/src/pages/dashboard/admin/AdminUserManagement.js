@@ -1,352 +1,573 @@
-// src/pages/dashboard/admin/AdminUserManagement.js
 import React, { useState, useEffect } from 'react';
 import {
-  Box, Paper, Typography, TextField, Button, Grid,
-  Card, CardContent, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, TablePagination,
-  Chip, IconButton, Menu, MenuItem, Dialog, DialogTitle,
-  DialogContent, DialogActions, FormControl, InputLabel,
-  Select, Switch, FormControlLabel, Avatar, Tooltip,
-  Divider, Alert, ListItemIcon
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Grid,
+  Button,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Chip,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Avatar,
+  Tooltip
 } from '@mui/material';
 import {
-  Search as SearchIcon,
-  People as PeopleIcon,
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  MoreVert as MoreIcon,
+  Search as SearchIcon,
   Person as PersonIcon,
-  LocalHospital as DoctorIcon,
   AdminPanelSettings as AdminIcon,
-  Block as BlockIcon,
-  CheckCircle as ActiveIcon,
-  Shield as ShieldIcon,
-  Business as DeptIcon
+  LocalHospital as DoctorIcon,
+  MedicalServices as NurseIcon,
+  ContactSupport as ReceptionistIcon,
+  PersonOutline as PatientIcon
 } from '@mui/icons-material';
+import { useTheme } from '@mui/material/styles';
 
 const AdminUserManagement = () => {
+  const theme = useTheme();
   const [users, setUsers] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterRole, setFilterRole] = useState('all');
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedUser, setSelectedUser] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const [dialogMode, setDialogMode] = useState('add'); // 'add', 'edit', 'block'
+  const [editingUser, setEditingUser] = useState(null);
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
-    role: 'patient',
-    department: '',
-    status: 'active'
+    role: '',
+    phone: '',
+    status: 'Active'
   });
 
+  // Empty state - no mock data
   useEffect(() => {
-    loadUsers();
+    setUsers([]);
+    setFilteredUsers([]);
   }, []);
 
-  const loadUsers = async () => {
-    const mockUsers = [
-      { id: 1, name: 'John Patient', email: 'john@email.com', role: 'patient', status: 'active', joinDate: '2024-01-15', phone: '+1234567890', department: '-' },
-      { id: 2, name: 'Dr. Sarah Smith', email: 'sarah@gracecare.com', role: 'doctor', status: 'active', joinDate: '2023-11-20', phone: '+1987654321', department: 'Cardiology' },
-      { id: 3, name: 'Admin User', email: 'admin@gracecare.com', role: 'admin', status: 'active', joinDate: '2023-08-10', phone: '+1555000999', department: 'Administration' },
-      { id: 4, name: 'Dr. Mike Johnson', email: 'mike@gracecare.com', role: 'doctor', status: 'inactive', joinDate: '2023-12-05', phone: '+1444333222', department: 'Pediatrics' },
-      { id: 5, name: 'Banned Patient', email: 'banned@email.com', role: 'patient', status: 'blocked', joinDate: '2024-01-02', phone: '+1666777888', department: '-' },
-    ];
-    setUsers(mockUsers);
-  };
+  // Filter users based on search term
+  useEffect(() => {
+    const filtered = users.filter(user =>
+      user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.role.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  }, [searchTerm, users]);
 
-  const handleMenuOpen = (event, user) => {
-    setAnchorEl(event.currentTarget);
-    setSelectedUser(user);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleOpenDialog = (mode, user = null) => {
-    setDialogMode(mode);
+  const handleOpenDialog = (user = null) => {
     if (user) {
+      setEditingUser(user);
       setFormData({
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         role: user.role,
-        department: user.department,
+        phone: user.phone,
         status: user.status
       });
-      setSelectedUser(user);
     } else {
-      setFormData({ name: '', email: '', role: 'patient', department: '', status: 'active' });
+      setEditingUser(null);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: '',
+        phone: '',
+        status: 'Active'
+      });
     }
     setOpenDialog(true);
-    handleMenuClose();
   };
 
-  const handleAction = (action) => {
-    console.log(`${action} user:`, selectedUser);
-    handleMenuClose();
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setEditingUser(null);
   };
 
-  const filteredUsers = users.filter(user =>
-    (user.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-     user.email.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (filterRole === 'all' || user.role === filterRole)
-  );
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = () => {
+    if (editingUser) {
+      // Update existing user
+      setUsers(users.map(user => 
+        user.id === editingUser.id 
+          ? { ...user, ...formData }
+          : user
+      ));
+    } else {
+      // Add new user
+      const newUser = {
+        id: users.length + 1,
+        ...formData,
+        lastLogin: null,
+        dateCreated: new Date().toISOString()
+      };
+      setUsers([...users, newUser]);
+    }
+    handleCloseDialog();
+  };
+
+  const handleDeleteUser = (userId) => {
+    setUsers(users.filter(user => user.id !== userId));
+  };
+
+  const getRoleIcon = (role) => {
+    switch (role) {
+      case 'admin': return <AdminIcon />;
+      case 'doctor': return <DoctorIcon />;
+      case 'nurse': return <NurseIcon />;
+      case 'receptionist': return <ReceptionistIcon />;
+      case 'patient': return <PatientIcon />;
+      default: return <PersonIcon />;
+    }
+  };
+
+  const getRoleColor = (role) => {
+    switch (role) {
+      case 'admin': return '#ef4444';
+      case 'doctor': return '#3b82f6';
+      case 'nurse': return '#10b981';
+      case 'receptionist': return '#f59e0b';
+      case 'patient': return '#8b5cf6';
+      default: return '#6b7280';
+    }
+  };
+
+  const getStatusColor = (status) => {
+    return status === 'Active' ? '#10b981' : '#ef4444';
+  };
 
   return (
-    <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h4" fontWeight="bold" color="secondary.main">
+    <Box sx={{ width: '100%', p: { xs: 2, md: 3 } }}>
+      {/* Header */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" fontWeight="700" color="#1E293B" gutterBottom>
           User Management
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => handleOpenDialog('add')}
-          sx={{ borderRadius: 2 }}
-        >
-          Add New User
-        </Button>
+        <Typography variant="body1" color="text.secondary">
+          Manage all system users, roles, and permissions
+        </Typography>
       </Box>
 
+      {/* Stats Cards */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
-        {[
-          { title: 'Total Users', count: users.length, icon: <PeopleIcon />, color: '#6366F1' },
-          { title: 'Active Doctors', count: users.filter(u => u.role === 'doctor' && u.status === 'active').length, icon: <DoctorIcon />, color: '#14B8A6' },
-          { title: 'Active Patients', count: users.filter(u => u.role === 'patient' && u.status === 'active').length, icon: <PersonIcon />, color: '#06B6D4' },
-          { title: 'System Admins', count: users.filter(u => u.role === 'admin').length, icon: <ShieldIcon />, color: '#F59E0B' }
-        ].map((stat, i) => (
-          <Grid item xs={12} sm={6} md={3} key={i}>
-            <Card sx={{ border: 'none', bgcolor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ p: 1.5, borderRadius: 3, bgcolor: `${stat.color}15`, color: stat.color }}>{stat.icon}</Box>
-                <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight="600">{stat.title}</Typography>
-                  <Typography variant="h5" fontWeight="700">{stat.count}</Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+        <Grid item xs={12} sm={6} md={2.4}>
+          <Card sx={{ 
+            borderRadius: 3, 
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            border: 'none',
+            height: '100%'
+          }}>
+            <CardContent sx={{ p: 3, textAlign: 'center' }}>
+              <Box sx={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '50%', 
+                bgcolor: '#F0FDFA', 
+                color: '#14B8A6', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                mb: 2,
+                mx: 'auto'
+              }}>
+                <PersonIcon sx={{ fontSize: 24 }} />
+              </Box>
+              <Typography variant="h4" fontWeight="700" color="#1E293B">
+                {users.length}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Total Users
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} sm={6} md={2.4}>
+          <Card sx={{ 
+            borderRadius: 3, 
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            border: 'none',
+            height: '100%'
+          }}>
+            <CardContent sx={{ p: 3, textAlign: 'center' }}>
+              <Box sx={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '50%', 
+                bgcolor: '#EFF6FF', 
+                color: '#3B82F6', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                mb: 2,
+                mx: 'auto'
+              }}>
+                <DoctorIcon sx={{ fontSize: 24 }} />
+              </Box>
+              <Typography variant="h4" fontWeight="700" color="#1E293B">
+                {users.filter(u => u.role === 'doctor').length}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Doctors
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} sm={6} md={2.4}>
+          <Card sx={{ 
+            borderRadius: 3, 
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            border: 'none',
+            height: '100%'
+          }}>
+            <CardContent sx={{ p: 3, textAlign: 'center' }}>
+              <Box sx={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '50%', 
+                bgcolor: '#F0FDF4', 
+                color: '#10B981', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                mb: 2,
+                mx: 'auto'
+              }}>
+                <NurseIcon sx={{ fontSize: 24 }} />
+              </Box>
+              <Typography variant="h4" fontWeight="700" color="#1E293B">
+                {users.filter(u => u.role === 'nurse').length}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Nurses
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} sm={6} md={2.4}>
+          <Card sx={{ 
+            borderRadius: 3, 
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            border: 'none',
+            height: '100%'
+          }}>
+            <CardContent sx={{ p: 3, textAlign: 'center' }}>
+              <Box sx={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '50%', 
+                bgcolor: '#FFFBEB', 
+                color: '#F59E0B', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                mb: 2,
+                mx: 'auto'
+              }}>
+                <ReceptionistIcon sx={{ fontSize: 24 }} />
+              </Box>
+              <Typography variant="h4" fontWeight="700" color="#1E293B">
+                {users.filter(u => u.role === 'receptionist').length}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Receptionists
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+        
+        <Grid item xs={12} sm={6} md={2.4}>
+          <Card sx={{ 
+            borderRadius: 3, 
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            border: 'none',
+            height: '100%'
+          }}>
+            <CardContent sx={{ p: 3, textAlign: 'center' }}>
+              <Box sx={{ 
+                width: 48, 
+                height: 48, 
+                borderRadius: '50%', 
+                bgcolor: '#F5F3FF', 
+                color: '#8B5CF6', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                mb: 2,
+                mx: 'auto'
+              }}>
+                <PatientIcon sx={{ fontSize: 24 }} />
+              </Box>
+              <Typography variant="h4" fontWeight="700" color="#1E293B">
+                {users.filter(u => u.role === 'patient').length}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Patients
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
       </Grid>
 
-      <Card sx={{ mb: 3, borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-        <CardContent>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                placeholder="Search by name or email..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                InputProps={{
-                  startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
-                  sx: { borderRadius: 2 }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <FormControl fullWidth>
-                <InputLabel>Filter Role</InputLabel>
-                <Select
-                  value={filterRole}
-                  label="Filter Role"
-                  onChange={(e) => setFilterRole(e.target.value)}
-                  sx={{ borderRadius: 2 }}
-                >
-                  <MenuItem value="all">All Roles</MenuItem>
-                  <MenuItem value="admin">Administrators</MenuItem>
-                  <MenuItem value="doctor">Doctors</MenuItem>
-                  <MenuItem value="patient">Patients</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} md={3}>
-              <Box sx={{ display: 'flex', gap: 1 }}>
-                <Tooltip title="Export Users">
-                  <Button variant="outlined" sx={{ borderRadius: 2, flexGrow: 1 }}>Export</Button>
-                </Tooltip>
-              </Box>
-            </Grid>
-          </Grid>
+      {/* Search and Actions */}
+      <Card sx={{ 
+        borderRadius: 3, 
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+        border: 'none',
+        mb: 4
+      }}>
+        <CardContent sx={{ p: 3 }}>
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: { xs: 'column', md: 'row' },
+            gap: 2,
+            alignItems: { md: 'center' },
+            justifyContent: 'space-between'
+          }}>
+            <TextField
+              placeholder="Search users..."
+              variant="outlined"
+              size="small"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              sx={{ width: { xs: '100%', md: 300 } }}
+              InputProps={{
+                startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />
+              }}
+            />
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => handleOpenDialog()}
+              sx={{
+                bgcolor: '#14B8A6',
+                '&:hover': { bgcolor: '#0D9488' },
+                borderRadius: 2,
+                px: 3
+              }}
+            >
+              Add User
+            </Button>
+          </Box>
         </CardContent>
       </Card>
 
-      <TableContainer component={Paper} sx={{ borderRadius: 3, boxShadow: '0 4px 20px rgba(0,0,0,0.05)', overflow: 'hidden' }}>
-        <Table>
-          <TableHead sx={{ bgcolor: '#F8FAFC' }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>User Info</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Role & Dept</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Join Date</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
-              <TableRow key={user.id} hover>
-                <TableCell>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <Avatar sx={{ bgcolor: user.role === 'admin' ? '#F59E0B' : user.role === 'doctor' ? '#14B8A6' : '#06B6D4' }}>
-                      {user.name.charAt(0)}
-                    </Avatar>
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight="bold">{user.name}</Typography>
-                      <Typography variant="caption" color="text.secondary">{user.email}</Typography>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                    <Chip 
-                      label={user.role} 
-                      size="small" 
-                      color={user.role === 'admin' ? 'warning' : user.role === 'doctor' ? 'primary' : 'secondary'}
-                      sx={{ width: 'fit-content', textTransform: 'capitalize', fontWeight: 'bold' }}
-                    />
-                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                      <DeptIcon sx={{ fontSize: 12 }} /> {user.department}
-                    </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Chip 
-                    label={user.status} 
-                    size="small"
-                    variant="outlined"
-                    icon={user.status === 'active' ? <ActiveIcon /> : <BlockIcon />}
-                    color={user.status === 'active' ? 'success' : user.status === 'blocked' ? 'error' : 'default'}
-                    sx={{ fontWeight: 'bold' }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2">{user.joinDate}</Typography>
-                </TableCell>
-                <TableCell>
-                  <IconButton onClick={(e) => handleMenuOpen(e, user)}>
-                    <MoreIcon />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={filteredUsers.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={(e, newPage) => setPage(newPage)}
-          onRowsPerPageChange={(e) => {
-            setRowsPerPage(parseInt(e.target.value, 10));
-            setPage(0);
-          }}
-        />
-      </TableContainer>
-
-      {/* User Actions Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-        PaperProps={{ sx: { minWidth: 150, borderRadius: 2, boxShadow: '0 4px 20px rgba(0,0,0,0.1)' } }}
-      >
-        <MenuItem onClick={() => handleOpenDialog('edit', selectedUser)}>
-          <ListItemIcon><EditIcon fontSize="small" /></ListItemIcon>
-          Edit User
-        </MenuItem>
-        {selectedUser?.role === 'doctor' && (
-          <MenuItem onClick={() => handleAction('toggle_status')}>
-            <ListItemIcon><ActiveIcon fontSize="small" /></ListItemIcon>
-            {selectedUser?.status === 'active' ? 'Deactivate' : 'Activate'}
-          </MenuItem>
-        )}
-        <Divider />
-        {selectedUser?.status !== 'blocked' ? (
-          <MenuItem onClick={() => handleAction('block')} sx={{ color: 'error.main' }}>
-            <ListItemIcon><BlockIcon fontSize="small" color="error" /></ListItemIcon>
-            Block User
-          </MenuItem>
-        ) : (
-          <MenuItem onClick={() => handleAction('unblock')} sx={{ color: 'success.main' }}>
-            <ListItemIcon><ActiveIcon fontSize="small" color="success" /></ListItemIcon>
-            Unblock User
-          </MenuItem>
-        )}
-        <MenuItem onClick={() => handleAction('delete')} sx={{ color: 'error.main' }}>
-          <ListItemIcon><DeleteIcon fontSize="small" color="error" /></ListItemIcon>
-          Delete User
-        </MenuItem>
-      </Menu>
+      {/* Users Table */}
+      <Card sx={{ 
+        borderRadius: 3, 
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+        border: 'none'
+      }}>
+        <CardContent sx={{ p: 0 }}>
+          <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>
+            <Table sx={{ minWidth: 650 }}>
+              <TableHead>
+                <TableRow sx={{ bgcolor: '#F8FAFC' }}>
+                  <TableCell sx={{ fontWeight: 600, color: '#1E293B' }}>User</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1E293B' }}>Role</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1E293B' }}>Email</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1E293B' }}>Phone</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1E293B' }}>Status</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1E293B' }}>Last Login</TableCell>
+                  <TableCell sx={{ fontWeight: 600, color: '#1E293B' }}>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredUsers.map((user) => (
+                  <TableRow 
+                    key={user.id} 
+                    sx={{ 
+                      '&:hover': { bgcolor: '#F8FAFC' },
+                      '&:last-child td, &:last-child th': { border: 0 }
+                    }}
+                  >
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Avatar sx={{ bgcolor: getRoleColor(user.role) }}>
+                          {getRoleIcon(user.role)}
+                        </Avatar>
+                        <Box>
+                          <Typography variant="body1" fontWeight="500">
+                            {user.firstName} {user.lastName}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            ID: {user.id}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                        size="small"
+                        sx={{
+                          bgcolor: `${getRoleColor(user.role)}20`,
+                          color: getRoleColor(user.role),
+                          fontWeight: 500
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">{user.email}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">{user.phone}</Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={user.status}
+                        size="small"
+                        sx={{
+                          bgcolor: `${getStatusColor(user.status)}20`,
+                          color: getStatusColor(user.status),
+                          fontWeight: 500
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">
+                        {user.lastLogin 
+                          ? new Date(user.lastLogin).toLocaleDateString()
+                          : 'Never'
+                        }
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Tooltip title="Edit">
+                          <IconButton 
+                            size="small" 
+                            onClick={() => handleOpenDialog(user)}
+                            sx={{ color: '#14B8A6' }}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton 
+                            size="small" 
+                            onClick={() => handleDeleteUser(user.id)}
+                            sx={{ color: '#ef4444' }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
 
       {/* Add/Edit User Dialog */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: 3 } }}>
-        <DialogTitle sx={{ fontWeight: 'bold' }}>
-          {dialogMode === 'add' ? 'Add New User' : 'Edit User Details'}
+      <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle>
+          {editingUser ? 'Edit User' : 'Add New User'}
         </DialogTitle>
         <DialogContent>
-          <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', gap: 3 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                fullWidth
+                label="First Name"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                required
+              />
+              <TextField
+                fullWidth
+                label="Last Name"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                required
+              />
+            </Box>
             <TextField
               fullWidth
-              label="Full Name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            />
-            <TextField
-              fullWidth
-              label="Email Address"
+              label="Email"
+              name="email"
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={handleInputChange}
+              required
             />
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <FormControl fullWidth>
-                  <InputLabel>User Role</InputLabel>
-                  <Select
-                    label="User Role"
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                  >
-                    <MenuItem value="patient">Patient</MenuItem>
-                    <MenuItem value="doctor">Doctor</MenuItem>
-                    <MenuItem value="admin">Administrator</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6}>
-                <FormControl fullWidth disabled={formData.role === 'patient'}>
-                  <InputLabel>Department</InputLabel>
-                  <Select
-                    label="Department"
-                    value={formData.department}
-                    onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                  >
-                    <MenuItem value="Administration">Administration</MenuItem>
-                    <MenuItem value="Cardiology">Cardiology</MenuItem>
-                    <MenuItem value="Pediatrics">Pediatrics</MenuItem>
-                    <MenuItem value="Neurology">Neurology</MenuItem>
-                    <MenuItem value="Dental">Dental Care</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
-            {dialogMode === 'edit' && (
-              <Alert severity="info">
-                Last login: 2 hours ago from Chrome (Windows)
-              </Alert>
-            )}
+            <TextField
+              fullWidth
+              label="Phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+            />
+            <FormControl fullWidth>
+              <InputLabel>Role</InputLabel>
+              <Select
+                name="role"
+                value={formData.role}
+                onChange={handleInputChange}
+                required
+              >
+                <MenuItem value="admin">Admin</MenuItem>
+                <MenuItem value="doctor">Doctor</MenuItem>
+                <MenuItem value="nurse">Nurse</MenuItem>
+                <MenuItem value="receptionist">Receptionist</MenuItem>
+                <MenuItem value="patient">Patient</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel>Status</InputLabel>
+              <Select
+                name="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                required
+              >
+                <MenuItem value="Active">Active</MenuItem>
+                <MenuItem value="Suspended">Suspended</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
         </DialogContent>
-        <DialogActions sx={{ p: 3 }}>
-          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-          <Button variant="contained" onClick={() => setOpenDialog(false)}>
-            {dialogMode === 'add' ? 'Create User' : 'Save Changes'}
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button 
+            onClick={handleSubmit}
+            variant="contained"
+            sx={{ bgcolor: '#14B8A6', '&:hover': { bgcolor: '#0D9488' } }}
+          >
+            {editingUser ? 'Update' : 'Add'} User
           </Button>
         </DialogActions>
       </Dialog>

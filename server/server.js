@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const helmet = require('helmet');
 const connectDB = require('./config/database');
+const { auditMiddleware } = require('./middleware/audit');
 
 // Load env vars - but don't fail if .env is missing (for production)
 try {
@@ -15,10 +17,14 @@ connectDB();
 
 const app = express();
 
+// Security Middleware
+app.use(helmet());
+
 // Middleware
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+app.use(auditMiddleware); // Audit logging middleware
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -27,6 +33,11 @@ app.use('/api/doctors', require('./routes/doctors'));
 app.use('/api/patients', require('./routes/patients'));
 app.use('/api/departments', require('./routes/departments'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/medical-records', require('./routes/medicalRecords'));
+app.use('/api/prescriptions', require('./routes/prescriptions'));
+app.use('/api/invoices', require('./routes/invoices'));
+app.use('/api/messages', require('./routes/messages'));
+app.use('/api/analytics', require('./routes/analytics'));
 
 // Basic route
 app.get('/', (req, res) => {
@@ -57,7 +68,12 @@ app.get('/api', (req, res) => {
       doctors: '/api/doctors',
       patients: '/api/patients',
       departments: '/api/departments',
-      admin: '/api/admin'
+      admin: '/api/admin',
+      'medical-records': '/api/medical-records',
+      prescriptions: '/api/prescriptions',
+      invoices: '/api/invoices',
+      messages: '/api/messages',
+      analytics: '/api/analytics'
     },
     timestamp: new Date().toISOString(),
   });

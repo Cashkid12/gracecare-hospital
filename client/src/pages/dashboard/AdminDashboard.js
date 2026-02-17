@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
   Drawer,
@@ -15,54 +16,50 @@ import {
   Menu,
   MenuItem,
   Badge,
+  Tooltip,
   useMediaQuery,
-  useTheme,
-  Container,
-  Grid,
-  Card,
-  CardContent,
-  Paper,
-  Button
+  useTheme
 } from '@mui/material';
+import DashboardContent from './DashboardContent';
 import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
   People as PeopleIcon,
-  CalendarToday as CalendarIcon,
   LocalHospital as LocalHospitalIcon,
+  LocalHospital as DoctorIcon,
+  Person as PatientIcon,
+  Event as AppointmentIcon,
   Analytics as AnalyticsIcon,
+  Description as RecordsIcon,
+  Assignment as PrescriptionIcon,
+  Payment as PaymentIcon,
+  Message as MessageIcon,
+  Business as DepartmentIcon,
+  Article as ContentIcon,
   Settings as SettingsIcon,
+  Logout as LogoutIcon,
   Notifications as NotificationsIcon,
   AccountCircle as AccountIcon,
-  ExitToApp as LogoutIcon,
   ChevronLeft as ChevronLeftIcon,
-  Assignment as RecordsIcon,
-  Person as PatientIcon,
-  Medication as RxIcon,
-  Payments as BillingIcon,
-  Web as ContentIcon,
-  Message as MessageIcon,
-  Group as DoctorIcon
+  ChevronRight as ChevronRightIcon,
+  Folder as FolderIcon,
+  Assessment as ReportIcon
 } from '@mui/icons-material';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-
-const drawerWidth = 280;
 
 const AdminDashboard = ({ children }) => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
   const theme = useTheme();
+  const location = useLocation();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleProfileMenuOpen = (event) => {
+  const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -71,106 +68,324 @@ const AdminDashboard = ({ children }) => {
   };
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    handleMenuClose();
+    // Add logout logic here
+    navigate('/login');
   };
 
-  const menuItems = [
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
+  };
+
+  const handleMenuItemClick = (path) => {
+    navigate(path);
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+  };
+
+  const allMenuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin-dashboard' },
-    { text: 'User Management', icon: <PeopleIcon />, path: '/admin-users' },
+    { text: 'Analytics', icon: <AnalyticsIcon />, path: '/admin-analytics' },
+    { text: 'Messages', icon: <MessageIcon />, path: '/admin-messages', badge: 3 },
+    { text: 'Users', icon: <PeopleIcon />, path: '/admin-users' },
     { text: 'Doctors', icon: <DoctorIcon />, path: '/admin-doctors' },
     { text: 'Patients', icon: <PatientIcon />, path: '/admin-patients' },
-    { text: 'Appointments', icon: <CalendarIcon />, path: '/admin-appointments' },
-    { text: 'Departments', icon: <LocalHospitalIcon />, path: '/admin-departments' },
+    { text: 'Appointments', icon: <AppointmentIcon />, path: '/admin-appointments' },
+    { text: 'Departments', icon: <DepartmentIcon />, path: '/admin-departments' },
     { text: 'Medical Records', icon: <RecordsIcon />, path: '/admin-medical-records' },
-    { text: 'Prescriptions', icon: <RxIcon />, path: '/admin-prescriptions' },
-    { text: 'Payments & Billing', icon: <BillingIcon />, path: '/admin-payments' },
-    { text: 'Content Management', icon: <ContentIcon />, path: '/admin-content' },
-    { text: 'Messages', icon: <MessageIcon />, path: '/admin-messages' },
-    { text: 'Analytics', icon: <AnalyticsIcon />, path: '/admin-analytics' },
-    { text: 'Settings', icon: <SettingsIcon />, path: '/admin-settings' },
+    { text: 'Prescriptions', icon: <PrescriptionIcon />, path: '/admin-prescriptions' },
+    { text: 'Payments', icon: <PaymentIcon />, path: '/admin-payments' },
+    { text: 'Content', icon: <ContentIcon />, path: '/admin-content' },
+    { text: 'Settings', icon: <SettingsIcon />, path: '/admin-settings' }
   ];
 
-  const drawer = (
-    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: 'white' }}>
-      <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2, background: 'linear-gradient(135deg, #14B8A6 0%, #0D9488 100%)', color: 'white' }}>
-        <LocalHospitalIcon sx={{ fontSize: 32 }} />
-        <Typography variant="h6" fontWeight="700" sx={{ letterSpacing: 0.5 }}>
-          Admin Panel
-        </Typography>
-      </Box>
-      <Divider />
-      <List sx={{ px: 2, py: 3, flexGrow: 1 }}>
-        {menuItems.map((item) => (
-          <ListItem
-            button
-            key={item.text}
-            onClick={() => {
-              navigate(item.path);
-              if (isMobile) setMobileOpen(false);
-            }}
-            sx={{
-              borderRadius: 2,
-              mb: 1,
-              backgroundColor: location.pathname === item.path ? 'rgba(20, 184, 166, 0.08)' : 'transparent',
-              color: location.pathname === item.path ? 'primary.main' : 'text.secondary',
-              '&:hover': {
-                backgroundColor: 'rgba(20, 184, 166, 0.04)',
-                color: 'primary.main',
-                '& .MuiListItemIcon-root': { color: 'primary.main' }
-              },
-            }}
-          >
-            <ListItemIcon sx={{ 
-              color: location.pathname === item.path ? 'primary.main' : 'inherit',
-              minWidth: 45 
-            }}>
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText 
-              primary={item.text} 
-              primaryTypographyProps={{ 
-                fontWeight: location.pathname === item.path ? 600 : 500,
-                fontSize: '0.95rem'
-              }} 
-            />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <Box sx={{ p: 2 }}>
-        <ListItem
-          button
-          onClick={handleLogout}
+  // Get active item based on current path
+  const getActiveItem = () => {
+    const currentPath = location.pathname;
+    const activeItem = allMenuItems.find(item => item.path === currentPath);
+    return activeItem ? activeItem.text : 'Dashboard';
+  };
+
+  const activeItem = getActiveItem();
+
+  const menuSections = [
+    {
+      title: 'Main',
+      items: [
+        { text: 'Dashboard', icon: <DashboardIcon />, path: '/admin-dashboard' },
+        { text: 'Analytics', icon: <AnalyticsIcon />, path: '/admin-analytics' },
+        { text: 'Messages', icon: <MessageIcon />, path: '/admin-messages', badge: 3 }
+      ]
+    },
+    {
+      title: 'Management',
+      items: [
+        { text: 'Users', icon: <PeopleIcon />, path: '/admin-users' },
+        { text: 'Doctors', icon: <DoctorIcon />, path: '/admin-doctors' },
+        { text: 'Patients', icon: <PatientIcon />, path: '/admin-patients' },
+        { text: 'Appointments', icon: <AppointmentIcon />, path: '/admin-appointments' },
+        { text: 'Departments', icon: <DepartmentIcon />, path: '/admin-departments' }
+      ]
+    },
+    {
+      title: 'Records',
+      items: [
+        { text: 'Medical Records', icon: <RecordsIcon />, path: '/admin-medical-records' },
+        { text: 'Prescriptions', icon: <PrescriptionIcon />, path: '/admin-prescriptions' },
+        { text: 'Payments', icon: <PaymentIcon />, path: '/admin-payments' },
+        { text: 'Content', icon: <ContentIcon />, path: '/admin-content' }
+      ]
+    }
+  ];
+
+  const renderMenuItem = (item) => {
+    const isActive = activeItem === item.text;
+    const menuItemContent = (
+      <ListItem
+        component="div"
+        onClick={() => handleMenuItemClick(item.path)}
+        sx={{
+          cursor: 'pointer',
+          py: 1.25,
+          px: sidebarCollapsed ? 1.5 : 2,
+          mx: 1.5,
+          mb: 0.5,
+          borderRadius: 2,
+          minHeight: 44,
+          position: 'relative',
+          overflow: 'hidden',
+          transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+          bgcolor: isActive ? '#F0FDFA' : 'transparent',
+          '&::before': isActive ? {
+            content: '""',
+            position: 'absolute',
+            left: 0,
+            top: '50%',
+            transform: 'translateY(-50%)',
+            width: 3,
+            height: 20,
+            bgcolor: '#14B8A6',
+            borderRadius: '0 4px 4px 0'
+          } : {},
+          '&:hover': {
+            bgcolor: isActive ? '#F0FDFA' : '#F8FAFC',
+            '& .menu-icon': {
+              color: '#14B8A6',
+              transform: 'scale(1.1)'
+            }
+          }
+        }}
+      >
+        <ListItemIcon
+          className="menu-icon"
           sx={{
-            borderRadius: 2,
-            color: 'error.main',
-            '&:hover': { backgroundColor: '#FEF2F2' }
+            minWidth: sidebarCollapsed ? 40 : 36,
+            mr: sidebarCollapsed ? 0 : 1.5,
+            color: isActive ? '#14B8A6' : '#64748B',
+            justifyContent: 'center',
+            transition: 'all 0.25s ease-in-out'
           }}
         >
-          <ListItemIcon sx={{ color: 'inherit', minWidth: 45 }}>
-            <LogoutIcon />
-          </ListItemIcon>
-          <ListItemText primary="Logout" primaryTypographyProps={{ fontWeight: 600 }} />
-        </ListItem>
+          {item.badge ? (
+            <Badge badgeContent={item.badge} color="error" sx={{ '& .MuiBadge-badge': { fontSize: '0.65rem', minWidth: 16, height: 16 } }}>
+              {item.icon}
+            </Badge>
+          ) : item.icon}
+        </ListItemIcon>
+        {!sidebarCollapsed && (
+          <ListItemText
+            primary={item.text}
+            primaryTypographyProps={{
+              fontWeight: isActive ? 600 : 500,
+              color: isActive ? '#0F766E' : '#475569',
+              fontSize: '0.875rem',
+              letterSpacing: '0.01em'
+            }}
+          />
+        )}
+      </ListItem>
+    );
+
+    return sidebarCollapsed ? (
+      <Tooltip key={item.text} title={item.text} placement="right" arrow>
+        {menuItemContent}
+      </Tooltip>
+    ) : menuItemContent;
+  };
+
+  const drawer = (
+    <Box
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        bgcolor: '#FFFFFF',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        width: sidebarCollapsed ? 72 : 260,
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        borderRight: '1px solid #E2E8F0',
+        boxShadow: '4px 0 24px rgba(0,0,0,0.04)'
+      }}
+    >
+      {/* Logo Section */}
+      <Box sx={{
+        px: sidebarCollapsed ? 2 : 2.5,
+        py: 2.5,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: sidebarCollapsed ? 'center' : 'space-between',
+        gap: 2,
+        borderBottom: '1px solid #F1F5F9'
+      }}>
+        <Box sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1.5,
+          color: '#14B8A6'
+        }}>
+          <LocalHospitalIcon sx={{ fontSize: 28 }} />
+          {!sidebarCollapsed && (
+            <Typography variant="h6" fontWeight="700" sx={{ letterSpacing: -0.5, color: '#1E293B' }}>
+              GraceCare
+            </Typography>
+          )}
+        </Box>
+        {!sidebarCollapsed && (
+          <IconButton
+            onClick={toggleSidebar}
+            sx={{
+              color: '#94A3B8',
+              p: 0.5,
+              '&:hover': { color: '#14B8A6', bgcolor: '#F0FDFA' }
+            }}
+          >
+            <ChevronLeftIcon sx={{ fontSize: 20 }} />
+          </IconButton>
+        )}
       </Box>
+
+      {/* Navigation Menu */}
+      <Box sx={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', py: 2 }}>
+        {menuSections.map((section, sectionIndex) => (
+          <Box key={section.title} sx={{ mb: sectionIndex < menuSections.length - 1 ? 2 : 0 }}>
+            {!sidebarCollapsed && (
+              <Typography
+                variant="caption"
+                sx={{
+                  px: 3,
+                  py: 1,
+                  display: 'block',
+                  color: '#94A3B8',
+                  fontWeight: 600,
+                  fontSize: '0.6875rem',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em'
+                }}
+              >
+                {section.title}
+              </Typography>
+            )}
+            <List sx={{ py: 0.5 }}>
+              {section.items.map((item) => renderMenuItem(item))}
+            </List>
+            {sectionIndex < menuSections.length - 1 && !sidebarCollapsed && (
+              <Divider sx={{ mx: 3, my: 1.5, borderColor: '#F1F5F9' }} />
+            )}
+          </Box>
+        ))}
+      </Box>
+
+      {/* Bottom Section */}
+      <Box sx={{ borderTop: '1px solid #F1F5F9', p: 1.5 }}>
+        {/* Settings */}
+        {renderMenuItem({ text: 'Settings', icon: <SettingsIcon />, path: '/admin-settings' })}
+        
+        {/* Logout */}
+        <Tooltip title={sidebarCollapsed ? 'Logout' : ''} placement="right" arrow>
+          <ListItem
+            component="div"
+            onClick={handleLogout}
+            sx={{
+              cursor: 'pointer',
+              py: 1.25,
+              px: sidebarCollapsed ? 1.5 : 2,
+              mx: 1.5,
+              mt: 0.5,
+              borderRadius: 2,
+              minHeight: 44,
+              transition: 'all 0.25s ease-in-out',
+              '&:hover': {
+                bgcolor: '#FEF2F2',
+                '& .logout-icon': {
+                  color: '#DC2626'
+                }
+              }
+            }}
+          >
+            <ListItemIcon
+              className="logout-icon"
+              sx={{
+                minWidth: sidebarCollapsed ? 40 : 36,
+                mr: sidebarCollapsed ? 0 : 1.5,
+                color: '#64748B',
+                justifyContent: 'center',
+                transition: 'all 0.25s ease-in-out'
+              }}
+            >
+              <LogoutIcon sx={{ fontSize: 22 }} />
+            </ListItemIcon>
+            {!sidebarCollapsed && (
+              <ListItemText
+                primary="Logout"
+                primaryTypographyProps={{
+                  fontWeight: 500,
+                  color: '#64748B',
+                  fontSize: '0.875rem'
+                }}
+              />
+            )}
+          </ListItem>
+        </Tooltip>
+      </Box>
+
+      {/* Collapse Toggle (when collapsed) */}
+      {sidebarCollapsed && (
+        <Box sx={{ p: 1.5, borderTop: '1px solid #F1F5F9' }}>
+          <Tooltip title="Expand sidebar" placement="right" arrow>
+            <IconButton
+              onClick={toggleSidebar}
+              sx={{
+                width: '100%',
+                color: '#94A3B8',
+                '&:hover': { color: '#14B8A6', bgcolor: '#F0FDFA' }
+              }}
+            >
+              <ChevronRightIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )}
     </Box>
   );
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#F8FAFC' }}>
+      {/* App Bar */}
       <AppBar
         position="fixed"
         sx={{
-          width: { md: `calc(100% - ${drawerWidth}px)` },
-          ml: { md: `${drawerWidth}px` },
+          width: { md: `calc(100% - ${sidebarCollapsed ? 75 : 250}px)` },
+          ml: { md: `${sidebarCollapsed ? 75 : 250}px` },
           bgcolor: 'white',
-          color: 'text.primary',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-          borderBottom: '1px solid rgba(0,0,0,0.05)'
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          color: '#1E293B',
+          transition: 'all 0.3s ease-in-out'
         }}
       >
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Toolbar sx={{ px: { xs: 2, md: 3 } }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -180,75 +395,75 @@ const AdminDashboard = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-
-          <Typography variant="h6" noWrap component="div" fontWeight="600" color="text.primary">
-            {menuItems.find(item => item.path === location.pathname)?.text || 'Dashboard'}
+          
+          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
+            Admin Dashboard
           </Typography>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 } }}>
-            <IconButton size="large" color="inherit">
-              <Badge badgeContent={0} color="error">
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <IconButton color="inherit" sx={{ color: '#64748B' }}>
+              <Badge badgeContent={3} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <Box 
-              onClick={handleProfileMenuOpen}
-              sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 1.5, 
-                cursor: 'pointer',
-                p: 0.5,
-                borderRadius: 2,
-                '&:hover': { bgcolor: 'rgba(0,0,0,0.02)' }
-              }}
+            
+            <IconButton
+              color="inherit"
+              onClick={handleMenuOpen}
+              sx={{ p: 0, color: '#64748B' }}
             >
-              <Avatar sx={{ width: 35, height: 35, bgcolor: 'primary.main', fontSize: '1rem' }}>
-                {user?.firstName?.charAt(0) || 'A'}
+              <Avatar sx={{ width: 36, height: 36, bgcolor: '#14B8A6' }}>
+                <AccountIcon />
               </Avatar>
-              {!isMobile && (
-                <Box>
-                  <Typography variant="subtitle2" fontWeight="600" lineHeight="1.2">
-                    {user?.firstName} {user?.lastName}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Hospital Admin
-                  </Typography>
-                </Box>
-              )}
-            </Box>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-              PaperProps={{
-                elevation: 3,
-                sx: { mt: 1.5, minWidth: 180, borderRadius: 2 }
-              }}
-            >
-              <MenuItem onClick={() => { navigate('/admin-profile'); handleMenuClose(); }}>
-                <ListItemIcon><AccountIcon fontSize="small" /></ListItemIcon>
-                Profile
-              </MenuItem>
-              <MenuItem onClick={() => { navigate('/admin-settings'); handleMenuClose(); }}>
-                <ListItemIcon><SettingsIcon fontSize="small" /></ListItemIcon>
-                Settings
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleLogout} sx={{ color: 'error.main' }}>
-                <ListItemIcon><LogoutIcon fontSize="small" sx={{ color: 'error.main' }} /></ListItemIcon>
-                Logout
-              </MenuItem>
-            </Menu>
+            </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
 
+      {/* User Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+        PaperProps={{
+          elevation: 3,
+          sx: {
+            mt: 1.5,
+            minWidth: 200,
+            borderRadius: 2,
+            boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
+          }
+        }}
+      >
+        <MenuItem onClick={handleMenuClose}>
+          <ListItemIcon>
+            <AccountIcon fontSize="small" />
+          </ListItemIcon>
+          Profile
+        </MenuItem>
+        <MenuItem onClick={handleMenuClose}>
+          <ListItemIcon>
+            <SettingsIcon fontSize="small" />
+          </ListItemIcon>
+          Settings
+        </MenuItem>
+        <Divider />
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
+            <LogoutIcon fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+      </Menu>
+
+      {/* Side Drawer */}
       <Box
         component="nav"
-        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+        sx={{
+          width: { md: sidebarCollapsed ? 72 : 260 },
+          flexShrink: { md: 0 },
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+        }}
       >
         <Drawer
           variant="temporary"
@@ -257,7 +472,12 @@ const AdminDashboard = ({ children }) => {
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', md: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: 'none' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: 280,
+              border: 'none',
+              boxShadow: '0 4px 24px rgba(0,0,0,0.12)'
+            }
           }}
         >
           {drawer}
@@ -266,7 +486,15 @@ const AdminDashboard = ({ children }) => {
           variant="permanent"
           sx={{
             display: { xs: 'none', md: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: 'none', boxShadow: '1px 0 10px rgba(0,0,0,0.02)' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
+              width: sidebarCollapsed ? 72 : 260,
+              border: 'none',
+              boxShadow: 'none',
+              bgcolor: 'transparent',
+              position: 'relative',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+            }
           }}
           open
         >
@@ -274,169 +502,21 @@ const AdminDashboard = ({ children }) => {
         </Drawer>
       </Box>
 
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 2, md: 4 },
-          width: { md: `calc(100% - ${drawerWidth}px)` },
-          mt: '64px'
+          width: { md: `calc(100% - ${sidebarCollapsed ? 75 : 250}px)` },
+          mt: '64px',
+          minHeight: 'calc(100vh - 64px)',
+          p: 0,
+          bgcolor: '#F8FAFC',
+          transition: 'all 0.3s ease-in-out'
         }}
       >
-        <Container maxWidth="xl" sx={{ p: 0 }}>
-          {children || <DefaultAdminContent />}
-        </Container>
+        {children || <DashboardContent />}
       </Box>
-    </Box>
-  );
-};
-
-// Moved original dashboard content here
-const DefaultAdminContent = () => {
-  const { user } = useAuth();
-  
-  const stats = {
-    totalPatients: 1247,
-    totalDoctors: 48,
-    totalAppointments: 324,
-    todayAppointments: 23,
-    revenue: 45280
-  };
-
-  const recentActivity = [
-    { id: 1, action: 'New patient registered', user: 'John Doe', time: '2 min ago', type: 'success' },
-    { id: 2, action: 'Appointment booked', user: 'Sarah Wilson', time: '5 min ago', type: 'info' },
-    { id: 3, action: 'Doctor added', user: 'Dr. Mike Johnson', time: '10 min ago', type: 'success' },
-    { id: 4, action: 'System backup completed', user: 'System', time: '1 hour ago', type: 'warning' }
-  ];
-
-  return (
-    <Box>
-      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-        <Box>
-          <Typography variant="h4" fontWeight="700" color="secondary.main" gutterBottom>
-            Welcome back, {user?.firstName || 'Admin'}! 👋
-          </Typography>
-          <Typography variant="body1" color="text.secondary">
-            Here's what's happening at GraceCare Hospital today.
-          </Typography>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button variant="contained" color="primary" startIcon={<MessageIcon />}>
-            Broadcast
-          </Button>
-          <Button variant="outlined" color="primary" startIcon={<SettingsIcon />}>
-            Quick Setup
-          </Button>
-        </Box>
-      </Box>
-
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        {[
-          { title: 'Total Patients', value: stats.totalPatients, icon: <PatientIcon />, color: '#14B8A6' },
-          { title: 'Total Doctors', value: stats.totalDoctors, icon: <DoctorIcon />, color: '#06B6D4' },
-          { title: 'Total Appointments', value: stats.totalAppointments, icon: <CalendarIcon />, color: '#6366F1' },
-          { title: 'Today\'s Appointments', value: stats.todayAppointments, icon: <CalendarIcon />, color: '#8B5CF6' },
-          { title: 'Monthly Revenue', value: `$${stats.revenue.toLocaleString()}`, icon: <BillingIcon />, color: '#F59E0B' }
-        ].map((stat, i) => (
-          <Grid item xs={12} sm={6} md={2.4} key={i}>
-            <Card sx={{ border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-              <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <Box sx={{ p: 1.5, borderRadius: 3, bgcolor: `${stat.color}15`, color: stat.color }}>
-                  {stat.icon}
-                </Box>
-                <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight="600" sx={{ textTransform: 'uppercase' }}>
-                    {stat.title}
-                  </Typography>
-                  <Typography variant="h5" fontWeight="700">
-                    {stat.value}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 3, borderRadius: 4, mb: 3 }}>
-            <Typography variant="h6" fontWeight="700" gutterBottom>Recent Activity</Typography>
-            <List>
-              {recentActivity.map((activity) => (
-                <ListItem key={activity.id} divider sx={{ px: 0 }}>
-                  <ListItemIcon sx={{ minWidth: 40 }}>
-                    <Avatar sx={{ width: 32, height: 32, bgcolor: `${activity.type}.light`, color: `${activity.type}.main` }}>
-                      {activity.type === 'success' ? '✓' : activity.type === 'warning' ? '!' : 'i'}
-                    </Avatar>
-                  </ListItemIcon>
-                  <ListItemText 
-                    primary={activity.action} 
-                    secondary={`${activity.user} • ${activity.time}`} 
-                  />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
-
-          <Paper sx={{ p: 3, borderRadius: 4 }}>
-            <Typography variant="h6" fontWeight="700" gutterBottom color="error.main">System Alerts & Notifications</Typography>
-            <Box sx={{ mt: 2 }}>
-              {[
-                { severity: 'warning', message: 'Hospital storage reaching capacity (85%)', time: '1 hour ago' },
-                { severity: 'error', message: 'Failed database connection attempt from unauthorized IP', time: '3 hours ago' },
-                { severity: 'info', message: 'New system-wide update available', time: '5 hours ago' }
-              ].map((alert, i) => (
-                <Box key={i} sx={{ display: 'flex', alignItems: 'flex-start', gap: 2, mb: 2, p: 2, borderRadius: 2, bgcolor: `${alert.severity === 'error' ? '#FEF2F2' : alert.severity === 'warning' ? '#FFFBEB' : '#F0F9FF'}` }}>
-                  <Box sx={{ color: `${alert.severity}.main`, mt: 0.5 }}>
-                    <NotificationsIcon fontSize="small" />
-                  </Box>
-                  <Box sx={{ flexGrow: 1 }}>
-                    <Typography variant="body2" fontWeight="600">{alert.message}</Typography>
-                    <Typography variant="caption" color="text.secondary">{alert.time}</Typography>
-                  </Box>
-                  <Button size="small" color={alert.severity}>View</Button>
-                </Box>
-              ))}
-            </Box>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3, borderRadius: 4, bgcolor: 'primary.main', color: 'white', mb: 3 }}>
-            <Typography variant="h6" fontWeight="700" gutterBottom>System Health</Typography>
-            <Box sx={{ mt: 2 }}>
-              {['Database', 'API Server', 'Auth Service', 'Storage', 'Email SMTP'].map((service) => (
-                <Box key={service} sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography variant="body2">{service}</Typography>
-                  <Badge color="success" variant="dot" sx={{ '& .MuiBadge-badge': { width: 10, height: 10, borderRadius: '50%' } }}>
-                    <Typography variant="caption">Online</Typography>
-                  </Badge>
-                </Box>
-              ))}
-            </Box>
-          </Paper>
-
-          <Paper sx={{ p: 3, borderRadius: 4 }}>
-            <Typography variant="h6" fontWeight="700" gutterBottom>Hospital Summary</Typography>
-            <Divider sx={{ my: 2 }} />
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color="text.secondary">Active Doctors</Typography>
-                <Typography variant="body2" fontWeight="600">42/48</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color="text.secondary">Bed Occupancy</Typography>
-                <Typography variant="body2" fontWeight="600">78%</Typography>
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2" color="text.secondary">Pending Approvals</Typography>
-                <Typography variant="body2" fontWeight="600" color="warning.main">15</Typography>
-              </Box>
-            </Box>
-          </Paper>
-        </Grid>
-      </Grid>
     </Box>
   );
 };

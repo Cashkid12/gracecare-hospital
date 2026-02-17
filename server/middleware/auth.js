@@ -45,12 +45,22 @@ const protect = async (req, res, next) => {
 
 const authorize = (...roles) => {
   return (req, res, next) => {
+    // Check if user has any of the required roles
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        message: `User role ${req.user.role} is not authorized to access this route`
+        message: `User role '${req.user.role}' is not authorized to access this route`
       });
     }
+    
+    // Additional status check - users must be active
+    if (req.user.status === 'Suspended') {
+      return res.status(403).json({
+        success: false,
+        message: 'User account is suspended'
+      });
+    }
+    
     next();
   };
 };

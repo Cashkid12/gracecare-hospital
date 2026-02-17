@@ -23,6 +23,7 @@ import Login from './pages/Login';
 import AdminLogin from './pages/AdminLogin';
 import SignUp from './pages/SignUp';
 import BookAppointment from './pages/BookAppointment';
+import TestLogin from './TestLogin';
 
 // Dashboard Pages
 import PatientDashboard from './pages/dashboard/PatientDashboard';
@@ -241,6 +242,7 @@ function App() {
               <Route path="/services" element={<Services />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/book-appointment" element={<BookAppointment />} />
+              <Route path="/test-login" element={<TestLogin />} />
               
               {/* Authentication Routes */}
               <Route path="/login" element={<Login />} />

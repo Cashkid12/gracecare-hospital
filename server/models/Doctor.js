@@ -38,9 +38,9 @@ const doctorSchema = new mongoose.Schema({
     min: 0
   },
   department: {
-    type: String,
-    required: [true, 'Department is required'],
-    trim: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Department',
+    required: [true, 'Department is required']
   },
   consultationFee: {
     type: Number,
